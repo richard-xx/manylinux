@@ -79,7 +79,6 @@ jobs:
         with:
           context: .
           file: ./Dockerfile
-          target: production
           builder: ${{ steps.buildx.outputs.name }}
           platforms: inux/amd64,linux/arm64,linux/386,linux/arm/v7
           push: true
