@@ -7,7 +7,7 @@ WORKDIR /io
 
 RUN ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && apt-get update -qq\
-    && apt-get install -no-install-recommends -y sudo git make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncursesw5-dev patchelf xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev unzip cmake \
+    && apt-get install --no-install-recommends -y sudo git make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncursesw5-dev patchelf xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev unzip cmake \
     && apt clean autoclean \
     && rm -rf /var/lib/{apt,dpkg,cache,log} \
     && adduser --shell /bin/bash --disabled-password --gecos "" arm \
