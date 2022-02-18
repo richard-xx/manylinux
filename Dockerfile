@@ -32,9 +32,9 @@ RUN env PYTHON_MAKE_OPTS="-j$(nproc)" PYTHON_CONFIGURE_OPTS="--enable-shared " p
 RUN env PYTHON_MAKE_OPTS="-j$(nproc)" PYTHON_CONFIGURE_OPTS="--enable-shared " pyenv install 3.8.12
 RUN env PYTHON_MAKE_OPTS="-j$(nproc)" PYTHON_CONFIGURE_OPTS="--enable-shared " pyenv install 3.9.10
 
-RUN eval "$(pyenv init -)" && pyenv shell 2.7.18 && curl -sSL https://bootstrap.pypa.io/pip/2.7/get-pip.py | python - && pip install -U build pipx certifi --no-cache-dir
-RUN eval "$(pyenv init -)" && pyenv shell 3.5.10 && curl -sSL https://bootstrap.pypa.io/pip/3.5/get-pip.py | python - && pip install -U build pipx certifi --no-cache-dir
-RUN eval "$(pyenv init -)" && pyenv shell 3.6.15 && curl -sSL https://bootstrap.pypa.io/pip/3.6/get-pip.py | python - && pip install -U build pipx certifi --no-cache-dir
+RUN eval "$(pyenv init -)" && pyenv shell 2.7.18 && curl -sSL https://bootstrap.pypa.io/pip/2.7/get-pip.py | python - && pip install -U build certifi --no-cache-dir
+RUN eval "$(pyenv init -)" && pyenv shell 3.5.10 && curl -sSL https://bootstrap.pypa.io/pip/3.5/get-pip.py | python - && pip install -U build certifi --no-cache-dir
+RUN eval "$(pyenv init -)" && pyenv shell 3.6.15 && curl -sSL https://bootstrap.pypa.io/pip/3.6/get-pip.py | python - && pip install -U build certifi --no-cache-dir
 RUN eval "$(pyenv init -)" && pyenv shell 3.7.12 && curl -sSL https://bootstrap.pypa.io/get-pip.py | python - && pip install -U build pipx certifi --no-cache-dir
 RUN eval "$(pyenv init -)" && pyenv shell 3.8.12 && curl -sSL https://bootstrap.pypa.io/get-pip.py | python - && pip install -U build pipx certifi --no-cache-dir
 RUN eval "$(pyenv init -)" && pyenv shell 3.9.10 && curl -sSL https://bootstrap.pypa.io/get-pip.py | python - && pip install -U build pipx certifi --no-cache-dir
