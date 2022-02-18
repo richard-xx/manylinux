@@ -22,8 +22,7 @@ ENV PATH $PYENV_ROOT/shims:$PYENV_ROOT/bin:/home/arm/.local/bin:$PATH
 
 RUN curl -sSL https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash \
     && echo 'eval "$(pyenv init --path)"' >> ~/.profile \
-    && echo 'eval "$(pyenv init -)"' >> ~/.bashrc \
-    && sed -i "s@https://www.python.org/ftp@http://npm.taobao.org/mirrors@g" $PYENV_ROOT/plugins/python-build/share/python-build/*.* 
+    && echo 'eval "$(pyenv init -)"' >> ~/.bashrc 
 RUN env PYTHON_MAKE_OPTS="-j$(nproc)" PYTHON_CONFIGURE_OPTS="--enable-shared " pyenv install -v 2.7.18
 RUN env PYTHON_MAKE_OPTS="-j$(nproc)" PYTHON_CONFIGURE_OPTS="--enable-shared " pyenv install -v 3.5.10
 RUN env PYTHON_MAKE_OPTS="-j$(nproc)" PYTHON_CONFIGURE_OPTS="--enable-shared " pyenv install -v 3.6.15
