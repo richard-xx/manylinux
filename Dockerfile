@@ -39,4 +39,4 @@ RUN eval "$(pyenv init -)" && pyenv shell 3.7.12 && curl -sSL https://bootstrap.
 RUN eval "$(pyenv init -)" && pyenv shell 3.8.12 && curl -sSL https://bootstrap.pypa.io/get-pip.py | python - && pip install -U build pipx certifi --no-cache-dir
 RUN eval "$(pyenv init -)" && pyenv shell 3.9.10 && curl -sSL https://bootstrap.pypa.io/get-pip.py | python - && pip install -U build pipx certifi --no-cache-dir
 
-RUN eval "$(pyenv init -)" && pyenv shell 3.9.10 && pipx install -U auditwheel
+RUN eval "$(pyenv init -)" && pyenv shell 3.9.10 && pipx install auditwheel
