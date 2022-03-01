@@ -4,14 +4,16 @@ ENV SHELL /bin/bash
 SHELL ["/bin/bash","-c"]
 
 WORKDIR /io
+ENV DEBIAN_FRONTEND=noninteractive
 
 RUN ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
-    && apt-get update -qq\
+    && apt-get update -qq \
+    && apt-get install --no-install-recommends -y apt-utils dialog \
     && apt-get install --no-install-recommends -y sudo git make build-essential libssl-dev zlib1g-dev \
     libbz2-dev libreadline-dev libsqlite3-dev wget curl ca-certificates llvm libncursesw5-dev patchelf \
     xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev unzip cmake \
     && apt clean autoclean \
-    && rm -rf /var/lib/{apt,dpkg,cache,log} \
+    && rm -rf /var/lib/{apt,cache,log} \
     && adduser --shell /bin/bash --disabled-password --gecos "" arm \
     && adduser arm sudo \
     && echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers \   
