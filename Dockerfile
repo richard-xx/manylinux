@@ -10,8 +10,8 @@ RUN ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && apt-get update -qq \
     && apt-get install --no-install-recommends -y apt-utils dialog \
     && apt-get install --no-install-recommends -y sudo git make build-essential libssl-dev zlib1g-dev \
-    libbz2-dev libreadline-dev libsqlite3-dev wget curl ca-certificates llvm libncursesw5-dev patchelf \
-    xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev unzip cmake \
+    libbz2-dev libreadline-dev libsqlite3-dev wget curl ca-certificates llvm libncursesw5-dev \
+    xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev unzip \
     && apt clean autoclean \
     && rm -rf /var/lib/{apt,cache,log} \
     && adduser --shell /bin/bash --disabled-password --gecos "" arm \
@@ -41,4 +41,4 @@ RUN eval "$(pyenv init -)" && pyenv shell 3.7.12 && curl -sSL https://bootstrap.
 RUN eval "$(pyenv init -)" && pyenv shell 3.8.12 && curl -sSL https://bootstrap.pypa.io/get-pip.py | python - && pip install -U build pipx certifi --no-cache-dir
 RUN eval "$(pyenv init -)" && pyenv shell 3.9.10 && curl -sSL https://bootstrap.pypa.io/get-pip.py | python - && pip install -U build pipx certifi --no-cache-dir
 
-RUN eval "$(pyenv init -)" && pyenv shell 3.9.10 && pipx install auditwheel
+RUN eval "$(pyenv init -)" && pyenv shell 3.9.10 && pipx install auditwheel && pipx install patchelf && pipx install cmake  
