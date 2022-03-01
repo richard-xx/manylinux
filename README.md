@@ -1,12 +1,51 @@
 # manylinux
 Docker manylinux image for building Linux arm32 / arm64 Python wheel packages
 
+```
+WORKDIR /io
+USER arm
+ENV PYENV_ROOT /home/arm/.pyenv
+PLAT aarch64 / x86_64 / i686 / armv7l
+```
+
+```shell
+
+[ -z "$PLAT" ] && export PLAT="$(uname -m)"
+
+function repair_wheel {
+    wheel="$1"
+    if ! auditwheel show "$wheel"; then
+        echo "Skipping non-platform wheel $wheel"
+    else
+        auditwheel repair "$wheel" --plat manylinux_2_24_""$PLAT"" -w /io/wheelhouse/
+    fi
+}
+
+# Compile wheels
+for PYBIN in "${PYENV_ROOT}"/versions/*/bin; do
+    "${PYBIN}/pip" install cython --install-option="--no-cython-compile"
+    "${PYBIN}/python" setup.py bdist_wheel
+done
+
+# Bundle external shared libraries into the wheels
+for whl in dist/*.whl; do
+    repair_wheel "$whl"
+done
+```
+
+### sudo: effective uid is not 0, 
+> sudo: effective uid is not 0, is /usr/bin/sudo on a file system with the 'nosuid' option set or an NFS file system without root privileges
+```shell
+docker run --rm --privileged multiarch/qemu-user-static --reset -p yes --credential yes
+```
+
+## build
 ```shell
 docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
 
-docker buildx build --tag manylibux_2_24 --tag manylibux_2_24:$(date +"%Y%m%d%H") --privileged --platform linux/amd64,linux/arm64,linux/386,linux/arm/v7 --push .
+docker buildx build --tag manylibux --tag manylibux:$(date +"%Y%m%d%H") --privileged --platform linux/amd64,linux/arm64,linux/386,linux/arm/v7 --push .
 ```
-
+or
 ```yaml
 # yaml-language-server: $schema=https://json.schemastore.org/github-workflow
 name: Build Docker Image
