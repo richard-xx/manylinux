@@ -9,7 +9,6 @@ PLAT aarch64 / x86_64 / i686 / armv7l
 ```
 
 ```shell
-
 [ -z "$PLAT" ] && export PLAT="$(uname -m)"
 
 function repair_wheel {
@@ -17,7 +16,7 @@ function repair_wheel {
     if ! auditwheel show "$wheel"; then
         echo "Skipping non-platform wheel $wheel"
     else
-        auditwheel repair "$wheel" --plat manylinux_2_24_""$PLAT"" -w /io/wheelhouse/
+        auditwheel repair "$wheel" --plat manylinux_2_24_"$PLAT" -w /io/wheelhouse/
     fi
 }
 
@@ -43,7 +42,7 @@ docker run --rm --privileged multiarch/qemu-user-static --reset -p yes --credent
 ```shell
 docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
 
-docker buildx build --tag manylibux --tag manylibux:$(date +"%Y%m%d%H") --privileged --platform linux/amd64,linux/arm64,linux/386,linux/arm/v7 --push .
+docker buildx build --tag manylibux_2_24 --tag manylibux_2_24:$(date +"%Y%m%d%H") --privileged --platform linux/amd64,linux/arm64,linux/386,linux/arm/v7 --push .
 ```
 or
 ```yaml
@@ -63,7 +62,7 @@ env:
   IMAGE: richard-xx/manylinux
 
 jobs:
-  build-and-push-slow:
+  build-and-push:
     runs-on: ubuntu-latest
 
     # 这里用于定义 GITHUB_TOKEN 的权限
@@ -109,6 +108,13 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Get Time
+        id: time
+        uses: nanzm/get-time-action@v1.1
+        with:
+          timeZone: 8
+          format: 'YYMMDDHH'
+
       # 根据输入自动生成 tag 和 label 等数据，说明见下
       - name: Extract metadata for Docker
         id: meta
@@ -121,6 +127,7 @@ jobs:
             type=ref,event=pr
             type=sha
             type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', github.event.repository.default_branch) }}
+            type=raw,value=${{ steps.time.outputs.time }}
 
       # 构建并上传
       - name: Build and push
