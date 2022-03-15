@@ -15,8 +15,8 @@ RUN ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && apt-get install --no-install-recommends -y sudo git make build-essential libssl-dev zlib1g-dev \
     libbz2-dev libreadline-dev libsqlite3-dev wget curl ca-certificates llvm libncursesw5-dev \
     xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev unzip ccache \
-    && if [[ "$(uname -m)" =~ *86* ]]; then                                                                                                                                                  ─╯
-        apt-get --no-install-recommends -y install gcc-multilib g++-multilib
+    && if [[ "$(uname -m)" =~ *86* ]]; then \
+    apt-get --no-install-recommends -y install gcc-multilib g++-multilib ; \
     fi \
     && apt clean autoclean \
     && rm -rf /var/lib/{apt,cache,log} \
