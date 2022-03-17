@@ -10,13 +10,13 @@ ENV MANYLINUX_CXXFLAGS="-g -O2 -Wall -fdebug-prefix-map=/=. -fstack-protector-st
 ENV MANYLINUX_LDFLAGS="-Wl,-Bsymbolic-functions -Wl,-z,relro -Wl,-z,now"
 RUN ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && apt-get update -qq \
-    && apt-get install --no-install-recommends -y apt-utils dialog \
-    && apt-get install --no-install-recommends -y sudo git make build-essential libssl-dev zlib1g-dev \
+    && apt-get install --no-install-recommends -qq -y apt-utils dialog \
+    && apt-get install --no-install-recommends -qq -y sudo git make build-essential libssl-dev zlib1g-dev \
     libbz2-dev libreadline-dev libsqlite3-dev wget curl ca-certificates llvm libncursesw5-dev \
     xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev unzip ccache \
     autoconf automake libtool gettext \
     && if [[ "$(uname -m)" = x86_64 ]]; then \
-    apt-get --no-install-recommends -y install gcc-multilib g++-multilib ; \
+    apt-get --no-install-recommends -qq -y install gcc-multilib g++-multilib ; \
     fi \
     && apt clean autoclean \
     && rm -rf /var/lib/{apt,cache,log} \
@@ -31,8 +31,8 @@ RUN git clone https://github.com/Kitware/CMake.git --depth 1 -b release --quiet 
     && cd CMake \
     && env CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
     ./bootstrap -- -DCMAKE_BUILD_TYPE:STRING=Release > /dev/null \
-    && make -s -j \
-    && make install -j > /dev/null \
+    && make -s -j2 > /dev/null \
+    && make install -j2 > /dev/null \
     && cd .. && rm -rf CMake
 
 RUN git clone https://github.com/NixOS/patchelf.git --depth 1 --quiet \
@@ -43,9 +43,9 @@ RUN git clone https://github.com/NixOS/patchelf.git --depth 1 --quiet \
     ./bootstrap.sh > /dev/null \
     && env CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
     ./configure > /dev/null \
-    && make -s -j \
-    && make check -j > /dev/null \
-    && make install -j > /dev/null \
+    && make -s -j2 > /dev/null \
+    && make check -j2 > /dev/null \
+    && make install -j2 > /dev/null \
     && cd .. && rm -rf patchelf
     
 RUN git clone https://github.com/openssl/openssl.git --depth 1 -b OpenSSL_1_1_1-stable --recursive --shallow-submodules --quiet \
@@ -53,8 +53,8 @@ RUN git clone https://github.com/openssl/openssl.git --depth 1 -b OpenSSL_1_1_1-
     && cd openssl \
     && env CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
     ../config --prefix=/usr --openssldir=/usr --libdir=lib no-shared zlib-dynamic '-Wl,--enable-new-dtags,-rpath,$(LIBRPATH)' > /dev/null \
-    && make -s -j \
-    && make install_sw -j > /dev/null \
+    && make -s -j2 > /dev/null \
+    && make install_sw -j2 > /dev/null \
     && cd .. && rm -rf openssl
     
 USER arm
