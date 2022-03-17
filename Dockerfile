@@ -52,7 +52,7 @@ RUN git clone https://github.com/openssl/openssl.git --depth 1 -b OpenSSL_1_1_1-
     && apt remove -y libssl-dev \
     && cd openssl \
     && env CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
-    ../config --prefix=/usr --openssldir=/usr --libdir=lib no-shared zlib-dynamic '-Wl,--enable-new-dtags,-rpath,$(LIBRPATH)' > /dev/null \
+    ./config --prefix=/usr --openssldir=/usr --libdir=lib no-shared zlib-dynamic '-Wl,--enable-new-dtags,-rpath,$(LIBRPATH)' > /dev/null \
     && make -s -j2 > /dev/null \
     && make install_sw -j2 > /dev/null \
     && cd .. && rm -rf openssl
