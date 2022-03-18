@@ -15,7 +15,7 @@ RUN ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     libbz2-dev libreadline-dev libsqlite3-dev wget curl ca-certificates llvm libncursesw5-dev \
     xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev unzip ccache \
     autoconf automake libtool gettext \
-    && if [[ "$(uname -m)" = x86_64 ]]; then \
+    && if [[ "$(dpkg --print-architecture)" = i386 ]]; then \
     apt-get --no-install-recommends -qq -y install gcc-multilib g++-multilib ; \
     fi \
     && apt clean autoclean \
@@ -30,8 +30,13 @@ RUN ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
 RUN git clone https://github.com/openssl/openssl.git --depth 1 -b OpenSSL_1_1_1-stable --recursive --shallow-submodules --quiet \
     && apt remove -y libssl-dev \
     && cd openssl \
-    && env CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
-    MACHINE=$(dpkg --print-architecture) ./config --prefix=/usr --openssldir=/usr --libdir=lib no-shared zlib-dynamic '-Wl,--enable-new-dtags,-rpath,$(LIBRPATH)' > /dev/null \
+    && if [[ "$(dpkg --print-architecture)" = i386 ]]; then \
+    env CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
+    MACHINE=$(dpkg --print-architecture) ./config --prefix=/usr --openssldir=/usr --libdir=lib no-shared zlib-dynamic '-Wl,--enable-new-dtags,-rpath,$(LIBRPATH)' > /dev/null ; \
+    else \
+    env CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
+    M./config --prefix=/usr --openssldir=/usr --libdir=lib no-shared zlib-dynamic '-Wl,--enable-new-dtags,-rpath,$(LIBRPATH)' > /dev/null \
+    fi \
     && make -s -j2 > /dev/null \
     && make install_sw -j2 > /dev/null \
     && cd .. && rm -rf openssl
