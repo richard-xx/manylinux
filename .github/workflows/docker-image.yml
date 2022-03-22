@@ -14,8 +14,10 @@ env:
   IMAGE: richard-xx/manylinux
 
 jobs:
+  
   build-and-push:
     runs-on: ubuntu-latest
+    timeout-minutes: 1200
 
     # 这里用于定义 GITHUB_TOKEN 的权限
     permissions:
