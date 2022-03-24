@@ -37,17 +37,17 @@ RUN git clone https://github.com/openssl/openssl.git --depth 1 -b OpenSSL_1_1_1-
     env CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
     ./config --prefix=/usr --openssldir=/usr --libdir=lib no-shared zlib-dynamic '-Wl,--enable-new-dtags,-rpath,$(LIBRPATH)' > /dev/null ;\
     fi \
-    && make -s -j2 > /dev/null \
-    && make install_sw -j2 > /dev/null \
+    && make -s -j > /dev/null \
+    && make install_sw -j > /dev/null \
     && cd .. && rm -rf openssl
 
-RUN git clone https://github.com/Kitware/CMake.git --depth 1 -b release --quiet \
-    && cd CMake \
-    && env CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
-    ./bootstrap -- -DCMAKE_BUILD_TYPE:STRING=Release > /dev/null \
-    && make -s -j2 > /dev/null \
-    && make install -j2 > /dev/null \
-    && cd .. && rm -rf CMake
+# RUN git clone https://github.com/Kitware/CMake.git --depth 1 -b release --quiet \
+#     && cd CMake \
+#     && env CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
+#     ./bootstrap -- -DCMAKE_BUILD_TYPE:STRING=Release > /dev/null \
+#     && make -s -j2 > /dev/null \
+#     && make install -j2 > /dev/null \
+#     && cd .. && rm -rf CMake
 
 RUN git clone https://github.com/NixOS/patchelf.git --depth 1 --quiet \
     && cd patchelf \
@@ -57,9 +57,9 @@ RUN git clone https://github.com/NixOS/patchelf.git --depth 1 --quiet \
     ./bootstrap.sh > /dev/null \
     && env CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
     ./configure > /dev/null \
-    && make -s -j2 > /dev/null \
-    && make check -j2 > /dev/null \
-    && make install -j2 > /dev/null \
+    && make -s -j > /dev/null \
+    && make check -j > /dev/null \
+    && make install -j > /dev/null \
     && cd .. && rm -rf patchelf
     
 USER arm
@@ -93,34 +93,37 @@ RUN eval "$(pyenv init -)" \
     && pip install -U build certifi --no-cache-dir
 
 RUN env CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
-    PYTHON_CONFIGURE_OPTS="--enable-shared --with-openssl-rpath=auto --with-ensurepip=no" pyenv install 3.7.12
+    PYTHON_CONFIGURE_OPTS="--enable-shared --with-openssl-rpath=auto --with-ensurepip=no" pyenv install 3.7.13
 RUN eval "$(pyenv init -)" \
-    && pyenv shell 3.7.12 \
+    && pyenv shell 3.7.13 \
     && curl -sSL https://bootstrap.pypa.io/get-pip.py | python - \
     && pip install -U build pipx certifi --no-cache-dir
 
 RUN env CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
-    PYTHON_CONFIGURE_OPTS="--enable-shared --with-openssl-rpath=auto --with-ensurepip=no" pyenv install 3.8.12
+    PYTHON_CONFIGURE_OPTS="--enable-shared --with-openssl-rpath=auto --with-ensurepip=no" pyenv install 3.8.13
 RUN eval "$(pyenv init -)" \
-    && pyenv shell 3.8.12 \
+    && pyenv shell 3.8.13 \
     && curl -sSL https://bootstrap.pypa.io/get-pip.py | python - \
     && pip install -U build pipx certifi --no-cache-dir
 
 RUN env CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
-    PYTHON_CONFIGURE_OPTS="--enable-shared --with-openssl-rpath=auto --with-ensurepip=no" pyenv install 3.9.10
+    PYTHON_CONFIGURE_OPTS="--enable-shared --with-openssl-rpath=auto --with-ensurepip=no" pyenv install 3.9.11
 RUN eval "$(pyenv init -)" \
-    && pyenv shell 3.9.10 \
+    && pyenv shell 3.9.11 \
     && curl -sSL https://bootstrap.pypa.io/get-pip.py | python - \
     && pip install -U build pipx certifi --no-cache-dir
 
 RUN eval "$(pyenv init -)" \
-    && pyenv shell 3.9.10 \
+    && pyenv shell 3.9.11 \
     && pipx install auditwheel
 
 RUN env CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
-    PYTHON_CONFIGURE_OPTS="--enable-shared --with-openssl-rpath=auto --with-ensurepip=no" pyenv install 3.10.2
+    PYTHON_CONFIGURE_OPTS="--enable-shared --with-openssl-rpath=auto --with-ensurepip=no" pyenv install 3.10.3
 RUN eval "$(pyenv init -)" \
-    && pyenv shell 3.10.2 \
+    && pyenv shell 3.10.3 \
     && curl -sSL https://bootstrap.pypa.io/get-pip.py | python - \
     && pip install -U build pipx certifi --no-cache-dir
 
+RUN wget https://github.com/richard-xx/manylinux/releases/download/precompiled_cmake/cmake-3.23.0-Linux-"$(dpkg --print-architecture)".deb \
+    && dpkg -i cmake-3.23.0-Linux-"$(dpkg --print-architecture)".deb \
+    && rm -rf cmake-3.23.0-Linux-"$(dpkg --print-architecture)".deb
