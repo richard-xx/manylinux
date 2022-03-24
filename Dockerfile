@@ -37,8 +37,8 @@ RUN git clone https://github.com/openssl/openssl.git --depth 1 -b OpenSSL_1_1_1-
     env CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
     ./config --prefix=/usr --openssldir=/usr --libdir=lib no-shared zlib-dynamic '-Wl,--enable-new-dtags,-rpath,$(LIBRPATH)' > /dev/null ;\
     fi \
-    && make -s -j > /dev/null \
-    && make install_sw -j > /dev/null \
+    && make -s -j2 > /dev/null \
+    && make install_sw -j2 > /dev/null \
     && cd .. && rm -rf openssl
 
 # RUN git clone https://github.com/Kitware/CMake.git --depth 1 -b release --quiet \
@@ -57,9 +57,9 @@ RUN git clone https://github.com/NixOS/patchelf.git --depth 1 --quiet \
     ./bootstrap.sh > /dev/null \
     && env CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
     ./configure > /dev/null \
-    && make -s -j > /dev/null \
-    && make check -j > /dev/null \
-    && make install -j > /dev/null \
+    && make -s -j2 > /dev/null \
+    && make check -j2 > /dev/null \
+    && make install -j2 > /dev/null \
     && cd .. && rm -rf patchelf
     
 USER arm
