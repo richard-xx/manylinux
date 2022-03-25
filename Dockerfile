@@ -37,8 +37,8 @@ RUN git clone https://github.com/openssl/openssl.git --depth 1 -b OpenSSL_1_1_1-
     env CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
     ./config --prefix=/usr --openssldir=/usr --libdir=lib no-shared zlib-dynamic '-Wl,--enable-new-dtags,-rpath,$(LIBRPATH)' > /dev/null ;\
     fi \
-    && make -s -j2 > /dev/null \
-    && make install_sw -j2 > /dev/null \
+    && make -s -j > /dev/null \
+    && make install_sw -j > /dev/null \
     && cd .. && rm -rf openssl
 
 # RUN git clone https://github.com/Kitware/CMake.git --depth 1 -b release --quiet \
@@ -49,18 +49,18 @@ RUN git clone https://github.com/openssl/openssl.git --depth 1 -b OpenSSL_1_1_1-
 #     && make install -j2 > /dev/null \
 #     && cd .. && rm -rf CMake
 
-RUN git clone https://github.com/NixOS/patchelf.git --depth 1 --quiet \
-    && cd patchelf \
-    && sed -i "s@<optional>@<experimental/optional>@g" src/patchelf.* \
-    && sed -i "s@std::optional@std::experimental::optional@g" src/patchelf.* \
-    && env CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
-    ./bootstrap.sh > /dev/null \
-    && env CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
-    ./configure > /dev/null \
-    && make -s -j2 > /dev/null \
-    && make check -j2 > /dev/null \
-    && make install -j2 > /dev/null \
-    && cd .. && rm -rf patchelf
+# RUN git clone https://github.com/NixOS/patchelf.git --depth 1 --quiet \
+#     && cd patchelf \
+#     && sed -i "s@<optional>@<experimental/optional>@g" src/patchelf.* \
+#     && sed -i "s@std::optional@std::experimental::optional@g" src/patchelf.* \
+#     && env CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
+#     ./bootstrap.sh > /dev/null \
+#     && env CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
+#     ./configure > /dev/null \
+#     && make -s -j > /dev/null \
+#     && make check -j > /dev/null \
+#     && make install -j > /dev/null \
+#     && cd .. && rm -rf patchelf
     
 USER arm
 WORKDIR /io
@@ -115,7 +115,8 @@ RUN eval "$(pyenv init -)" \
 
 RUN eval "$(pyenv init -)" \
     && pyenv shell 3.9.11 \
-    && pipx install auditwheel
+    && pipx install auditwheel \
+    && pipx install patchelf
 
 RUN env CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
     PYTHON_CONFIGURE_OPTS="--enable-shared --with-openssl-rpath=auto --with-ensurepip=no" pyenv install 3.10.3
@@ -124,6 +125,6 @@ RUN eval "$(pyenv init -)" \
     && curl -sSL https://bootstrap.pypa.io/get-pip.py | python - \
     && pip install -U build pipx certifi --no-cache-dir
 
-RUN wget https://github.com/richard-xx/manylinux/releases/download/precompiled_cmake/cmake-3.23.0-Linux-"$(dpkg --print-architecture)".deb \
-    && sudo dpkg -i cmake-3.23.0-Linux-"$(dpkg --print-architecture)".deb \
-    && rm -rf cmake-3.23.0-Linux-"$(dpkg --print-architecture)".deb
+RUN curl -sSLo cmake-3.23.0-Linux.deb https://github.com/richard-xx/manylinux/releases/download/precompiled_cmake/cmake-3.23.0-Linux-"$(dpkg --print-architecture)".deb \
+    && sudo dpkg -i cmake-3.23.0-Linux.deb \
+    && rm -rf cmake-3.23.0-Linux.deb
