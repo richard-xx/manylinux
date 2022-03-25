@@ -4,9 +4,9 @@ name: Build Docker Image
 # 当 push 到 master 分支，或者创建以 v 开头的 tag 时触发，可根据需求修改
 on:
   push:
-    paths: |
-        'Dockerfile'
-        '.github/workflows/docker-image.yml'
+    paths: 
+        - 'Dockerfile'
+        - '.github/workflows/docker-image.yml'
 
 env:
   REGISTRY: ghcr.io
