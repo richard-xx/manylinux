@@ -125,5 +125,5 @@ RUN eval "$(pyenv init -)" \
     && pip install -U build pipx certifi --no-cache-dir
 
 RUN wget https://github.com/richard-xx/manylinux/releases/download/precompiled_cmake/cmake-3.23.0-Linux-"$(dpkg --print-architecture)".deb \
-    && dpkg -i cmake-3.23.0-Linux-"$(dpkg --print-architecture)".deb \
+    && sudo dpkg -i cmake-3.23.0-Linux-"$(dpkg --print-architecture)".deb \
     && rm -rf cmake-3.23.0-Linux-"$(dpkg --print-architecture)".deb
