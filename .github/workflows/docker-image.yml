@@ -46,7 +46,7 @@ jobs:
           version: latest
           config-inline: |
             [worker.oci]
-              max-parallelism = 1
+              max-parallelism = 4
 
       - name: Inspect builder
         run: |
