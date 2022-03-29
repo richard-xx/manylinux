@@ -14,7 +14,6 @@ RUN ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && apt-get install --no-install-recommends -qq -y sudo git make build-essential libssl-dev zlib1g-dev \
     libbz2-dev libreadline-dev libsqlite3-dev wget curl ca-certificates llvm libncursesw5-dev \
     xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev unzip ccache \
-    autoconf automake libtool gettext \
     && if [[ "$(dpkg --print-architecture)" = i386 ]]; then \
     apt-get --no-install-recommends -qq -y install gcc-multilib g++-multilib ; \
     fi \
@@ -26,20 +25,25 @@ RUN ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && echo "[global]" >> /etc/pip.conf \
     && echo "index-url=https://pypi.tuna.tsinghua.edu.cn/simple" >> /etc/pip.conf \
     && echo "extra-index-url=https://www.piwheels.org/simple" >> /etc/pip.conf 
+ 
+ RUN apt remove -y libssl-dev \
+     &&curl -sSLo openssl_1.1.1n.deb https://github.com/richard-xx/manylinux/releases/download/OpenSSL_1_1_1n/openssl_1.1.1n-1_"$(dpkg --print-architecture)".deb \
+     && sudo dpkg -i openssl_1.1.1n.deb \
+     && rm -rf openssl_1.1.1n.deb
     
-RUN git clone https://github.com/openssl/openssl.git --depth 1 -b OpenSSL_1_1_1-stable --recursive --shallow-submodules --quiet \
-    && apt remove -y libssl-dev \
-    && cd openssl \
-    && if [[ "$(dpkg --print-architecture)" = i386 ]]; then \
-    env CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
-    MACHINE=$(dpkg --print-architecture) ./config --prefix=/usr --openssldir=/usr --libdir=lib no-shared zlib-dynamic '-Wl,--enable-new-dtags,-rpath,$(LIBRPATH)' > /dev/null ; \
-    else \
-    env CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
-    ./config --prefix=/usr --openssldir=/usr --libdir=lib no-shared zlib-dynamic '-Wl,--enable-new-dtags,-rpath,$(LIBRPATH)' > /dev/null ;\
-    fi \
-    && make -s -j > /dev/null \
-    && make install_sw -j > /dev/null \
-    && cd .. && rm -rf openssl
+# RUN git clone https://github.com/openssl/openssl.git --depth 1 -b OpenSSL_1_1_1-stable --recursive --shallow-submodules --quiet \
+#     && apt remove -y libssl-dev \
+#     && cd openssl \
+#     && if [[ "$(dpkg --print-architecture)" = i386 ]]; then \
+#     env CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
+#     MACHINE=$(dpkg --print-architecture) ./config --prefix=/usr --openssldir=/usr --libdir=lib no-shared zlib-dynamic '-Wl,--enable-new-dtags,-rpath,$(LIBRPATH)' > /dev/null ; \
+#     else \
+#     env CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
+#     ./config --prefix=/usr --openssldir=/usr --libdir=lib no-shared zlib-dynamic '-Wl,--enable-new-dtags,-rpath,$(LIBRPATH)' > /dev/null ;\
+#     fi \
+#     && make -s -j > /dev/null \
+#     && make install_sw -j > /dev/null \
+#     && cd .. && rm -rf openssl
 
 # RUN git clone https://github.com/Kitware/CMake.git --depth 1 -b release --quiet \
 #     && cd CMake \
