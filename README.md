@@ -4,7 +4,6 @@ Docker manylinux image for building Linux arm32 / arm64 Python wheel packages
 ```
 WORKDIR /io
 USER arm
-ENV PYENV_ROOT /home/arm/.pyenv
 PLAT aarch64 / x86_64 / i686 / armv7l
 ```
 
@@ -21,7 +20,7 @@ function repair_wheel {
 }
 
 # Compile wheels
-for PYBIN in "${PYENV_ROOT}"/versions/*/bin; do
+for PYBIN in "/opt/python/*/bin; do
     "${PYBIN}/pip" install cython --install-option="--no-cython-compile"
     "${PYBIN}/python" setup.py bdist_wheel
 done
