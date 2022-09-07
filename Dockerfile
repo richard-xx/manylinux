@@ -1,6 +1,6 @@
 FROM ubuntu:16.04
-ENV TZ 'Asia/Shanghai'
-ENV SHELL /bin/bash
+ENV TZ='Asia/Shanghai'
+ENV SHELL=/bin/bash
 SHELL ["/bin/bash","-c"]
 
 ENV DEBIAN_FRONTEND=noninteractive
@@ -28,67 +28,47 @@ RUN ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && echo "[global]" >> /etc/pip.conf \
     && echo "index-url=https://pypi.tuna.tsinghua.edu.cn/simple" >> /etc/pip.conf
 
+RUN apt remove -y libssl-dev \
+    && curl -sSLo openssl_1.1.1n.deb https://github.com/richard-xx/manylinux/releases/download/OpenSSL_1_1_1n/openssl_1.1.1n-1_"$(dpkg --print-architecture)".deb \
+    && sudo dpkg -i openssl_1.1.1n.deb \
+    && rm -rf openssl_1.1.1n.deb
+
 RUN git clone https://github.com/pyenv/pyenv.git --depth 1 \
     && cd pyenv/plugins/python-build \
     && sudo bash ./install.sh
     
 RUN env PYTHON_MAKE_OPTS="-j$(nproc)" CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
-    PYTHON_CONFIGURE_OPTS="--enable-shared --with-openssl-rpath=auto" python-build 2.7.18 /opt/_internal/cpython-2.7.18
+    PYTHON_CONFIGURE_OPTS="--enable-shared --with-openssl-rpath=auto --with-ensurepip=no" python-build 2.7.18 /opt/_internal/cpython-2.7.18
 RUN curl -sSL https://bootstrap.pypa.io/pip/2.7/get-pip.py | /opt/_internal/cpython-2.7.18/bin/python -
 
 RUN env PYTHON_MAKE_OPTS="-j$(nproc)" CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
-    PYTHON_CONFIGURE_OPTS="--enable-shared --with-openssl-rpath=auto" python-build 3.5.10 /opt/_internal/cpython-3.5.10
+    PYTHON_CONFIGURE_OPTS="--enable-shared --with-openssl-rpath=auto --with-ensurepip=no" python-build 3.5.10 /opt/_internal/cpython-3.5.10
 RUN curl -sSL https://bootstrap.pypa.io/pip/3.5/get-pip.py | /opt/_internal/cpython-3.5.10/bin/python -
 
 RUN env PYTHON_MAKE_OPTS="-j$(nproc)" CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
-    PYTHON_CONFIGURE_OPTS="--enable-shared --with-openssl-rpath=auto" python-build 3.6.15 /opt/_internal/cpython-3.6.15
+    PYTHON_CONFIGURE_OPTS="--enable-shared --with-openssl-rpath=auto --with-ensurepip=no" python-build 3.6.15 /opt/_internal/cpython-3.6.15
 RUN curl -sSL https://bootstrap.pypa.io/pip/3.6/get-pip.py | /opt/_internal/cpython-3.6.15/bin/python -
-    && pip install -U build certifi --no-cache-dir
 
 RUN env PYTHON_MAKE_OPTS="-j$(nproc)" CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
-    PYTHON_CONFIGURE_OPTS="--enable-shared --with-openssl-rpath=auto" python-build 3.7.13 /opt/_internal/cpython-3.7.13
+    PYTHON_CONFIGURE_OPTS="--enable-shared --with-openssl-rpath=auto --with-ensurepip=no" python-build 3.7.13 /opt/_internal/cpython-3.7.13
 RUN curl -sSL https://bootstrap.pypa.io/get-pip.py | /opt/_internal/cpython-3.7.13/bin/python -
 
 RUN env PYTHON_MAKE_OPTS="-j$(nproc)" CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
-    PYTHON_CONFIGURE_OPTS="--enable-shared --with-openssl-rpath=auto" python-build 3.8.13 /opt/_internal/cpython-3.8.13
+    PYTHON_CONFIGURE_OPTS="--enable-shared --with-openssl-rpath=auto --with-ensurepip=no" python-build 3.8.13 /opt/_internal/cpython-3.8.13
 RUN curl -sSL https://bootstrap.pypa.io/get-pip.py | /opt/_internal/cpython-3.8.13/bin/python -
 
 RUN env PYTHON_MAKE_OPTS="-j$(nproc)" CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
-    PYTHON_CONFIGURE_OPTS="--enable-shared --with-openssl-rpath=auto" python-build 3.9.13 /opt/_internal/cpython-3.9.13
+    PYTHON_CONFIGURE_OPTS="--enable-shared --with-openssl-rpath=auto --with-ensurepip=no" python-build 3.9.13 /opt/_internal/cpython-3.9.13
 RUN curl -sSL https://bootstrap.pypa.io/get-pip.py | /opt/_internal/cpython-3.9.13/bin/python -
 
 RUN env PYTHON_MAKE_OPTS="-j$(nproc)" CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
-    PYTHON_CONFIGURE_OPTS="--enable-shared --with-openssl-rpath=auto" python-build 3.10.7 /opt/_internal/cpython-3.10.7
+    PYTHON_CONFIGURE_OPTS="--enable-shared --with-openssl-rpath=auto --with-ensurepip=no" python-build 3.10.7 /opt/_internal/cpython-3.10.7
 RUN curl -sSL https://bootstrap.pypa.io/get-pip.py | /opt/_internal/cpython-3.10.7/bin/python -
 
-RUN mkdir /opt/python \
-    && for PREFIX in $(find /opt/_internal/ -mindepth 1 -maxdepth 1 \( -name 'cpython*' -o -name 'pypy*' \)); do \
-        $(${PREFIX}/bin/python -m pip install -U build certifi \
-        ABI_TAG=$(${PREFIX}/bin/python ${MY_DIR}/python-tag-abi-tag.py) \
-        ln -s ${PREFIX} /opt/python/${ABI_TAG} \
-        if [[ "${PREFIX}" == *"/pypy"* ]]; then \
-            ln -s ${PREFIX}/bin/python /usr/local/bin/pypy${PY_VER} \
-        else \
-            ln -s ${PREFIX}/bin/python /usr/local/bin/python${PY_VER} \
-        fi \
-    done \
-    && TOOLS_PATH=/opt/_internal/tools \
-    && /opt/python/cp39-cp39/bin/python -m venv $TOOLS_PATH \
-    && source $TOOLS_PATH/bin/activate \
-    && pip install -U pipx \
-    && cat <<EOF > /usr/local/bin/pipx \
-    #!/bin/bash 
-    set -euo pipefail \
-    if [ \$(id -u) -eq 0 ]; then \
-        export PIPX_HOME=/opt/_internal/pipx \
-        export PIPX_BIN_DIR=/usr/local/bin \
-        fi \
-        ${TOOLS_PATH}/bin/pipx "\$@" \
-    EOF \
-    && chmod 755 /usr/local/bin/pipx \
-    && deactivate \
-    && pipx install auditwheel \
-    && pipx install patchelf
+COPY finalize.sh python-tag-abi-tag.py /tmp/
+RUN /tmp/finalize.sh
+
+RUN curl -sSLo - https://github.com/NixOS/patchelf/releases/download/0.15.0/patchelf-0.15.0-$(uname -m).tar.gz | tar -zxv --strip-components=1 -C /usr/local
 
 USER arm
 WORKDIR /io
