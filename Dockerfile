@@ -26,7 +26,11 @@ RUN ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && adduser arm sudo \
     && echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers \
     && echo "[global]" >> /etc/pip.conf \
-    && echo "index-url=https://pypi.tuna.tsinghua.edu.cn/simple" >> /etc/pip.conf
+    && echo "extra-index-url=https://pypi.tuna.tsinghua.edu.cn/simple" >> /etc/pip.conf \
+    && echo "                http://pypi.org/simple" >> /etc/pip.conf \
+    && echo "                https://pypi.org/simple" >> /etc/pip.conf \
+    && echo "trusted-host = pypi.tuna.tsinghua.edu.cn" >> /etc/pip.conf \
+    && echo "               pypi.org" >> /etc/pip.conf
 
 RUN apt remove -y libssl-dev \
     && curl -sSLo openssl_1.1.1n.deb https://github.com/richard-xx/manylinux/releases/download/OpenSSL_1_1_1n/openssl_1.1.1n-1_"$(dpkg --print-architecture)".deb \
