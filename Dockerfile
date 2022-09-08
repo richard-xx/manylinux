@@ -78,5 +78,13 @@ RUN if [[ "$(dpkg --print-architecture)" = i386 ]]; then \
     curl -sSLo - https://github.com/NixOS/patchelf/releases/download/0.15.0/patchelf-0.15.0-$(uname -m).tar.gz | tar -zxv --strip-components=1 -C /usr/local ; \
     fi 
 
+RUN apt update -qq \
+    && apt install -y gnupg2 apt-transport-https \
+    && apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv B43AA98A456BA62E7D0FC2570FFB30A4102243D5 \
+    && echo "deb http://ppa.launchpadcontent.net/richard-deng/cmake/ubuntu xenial main" | tee /etc/apt/sources.list.d/richard-deng-ubuntu-cmake.list \
+    && apt install -y cmake \
+    && apt clean autoclean \
+    && rm -rf /var/lib/{apt,cache,log}
+
 USER arm
 WORKDIR /io
