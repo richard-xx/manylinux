@@ -27,8 +27,6 @@ RUN ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers \
     && echo "[global]" >> /etc/pip.conf \
     && echo "extra-index-url=https://pypi.tuna.tsinghua.edu.cn/simple" >> /etc/pip.conf \
-    && echo "                http://pypi.org/simple" >> /etc/pip.conf \
-    && echo "                https://pypi.org/simple" >> /etc/pip.conf \
     && echo "trusted-host = pypi.tuna.tsinghua.edu.cn" >> /etc/pip.conf \
     && echo "               pypi.org" >> /etc/pip.conf
 
@@ -96,14 +94,6 @@ RUN if [[ "$(dpkg --print-architecture)" = i386 ]]; then \
     else \
     curl -sSLo - https://github.com/NixOS/patchelf/releases/download/0.16.0/patchelf-0.16.0-$(uname -m).tar.gz | tar -zxv --strip-components=1 -C /usr/local ; \
     fi 
-
-RUN apt update -qq \
-    && apt install -y gnupg2 apt-transport-https \
-    && apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv B43AA98A456BA62E7D0FC2570FFB30A4102243D5 \
-    && echo "deb http://ppa.launchpadcontent.net/richard-deng/cmake/ubuntu xenial main" | tee /etc/apt/sources.list.d/richard-deng-ubuntu-cmake.list \
-    && apt install -y cmake \
-    && apt clean autoclean \
-    && rm -rf /var/lib/{apt,cache,log}
 
 USER arm
 WORKDIR /io
