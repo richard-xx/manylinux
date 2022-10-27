@@ -12,11 +12,13 @@ RUN ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && apt-get update -qq \
     && apt-get install --no-install-recommends -qq -y apt-utils dialog \
     && apt-get install --no-install-recommends -qq wget curl ca-certificates \
-    && apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv B43AA98A456BA62E7D0FC2570FFB30A4102243D5 \
-    && echo "deb http://ppa.launchpadcontent.net/richard-deng/cmake/ubuntu xenial main" | tee /etc/apt/sources.list.d/richard-deng-ubuntu-cmake.list \
+    && mkdir -p /usr/local/share/keyrings \
+    && curl -fsSL "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x0FFB30A4102243D5" | gpg --dearmor | tee /usr/local/share/keyrings/richard-cmake.gpg > /dev/null \
+    && echo "deb [signed-by=/usr/local/share/keyrings/richard-cmake.gpg] http://ppa.launchpad.net/richard-deng/cmake/ubuntu xenial main" | tee /etc/apt/sources.list.d/richard-deng-ubuntu-cmake.list \
+    && apt-get update -qq \
     && apt-get install --no-install-recommends -qq -y sudo git make build-essential libssl-dev zlib1g-dev \
     libbz2-dev libreadline-dev libsqlite3-dev llvm libncursesw5-dev xz-utils tk-dev \
-    libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev unzip ccache cmake \
+    libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev unzip ccache cmake openssl \
     && if [[ "$(dpkg --print-architecture)" = i386 ]]; then \
     apt-get --no-install-recommends -qq -y install gcc-multilib g++-multilib ; \
     fi \
@@ -30,10 +32,10 @@ RUN ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && echo "trusted-host = pypi.tuna.tsinghua.edu.cn" >> /etc/pip.conf \
     && echo "               pypi.org" >> /etc/pip.conf
 
-RUN apt remove -y libssl-dev \
-    && curl -sSLo openssl_1.1.1n.deb https://github.com/richard-xx/manylinux/releases/download/OpenSSL_1_1_1n/openssl_1.1.1n-1_"$(dpkg --print-architecture)".deb \
-    && sudo dpkg -i openssl_1.1.1n.deb \
-    && rm -rf openssl_1.1.1n.deb
+# RUN apt remove -y libssl-dev \
+#     && curl -sSLo openssl_1.1.1n.deb https://github.com/richard-xx/manylinux/releases/download/OpenSSL_1_1_1n/openssl_1.1.1n-1_"$(dpkg --print-architecture)".deb \
+#     && sudo dpkg -i openssl_1.1.1n.deb \
+#     && rm -rf openssl_1.1.1n.deb
 
 RUN git clone https://github.com/pyenv/pyenv.git --depth 1 \
     && cd pyenv/plugins/python-build \
