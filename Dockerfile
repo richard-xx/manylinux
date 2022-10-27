@@ -92,9 +92,9 @@ COPY finalize.sh python-tag-abi-tag.py /tmp/
 RUN /tmp/finalize.sh
 
 RUN if [[ "$(dpkg --print-architecture)" = i386 ]]; then \
-    curl -sSLo - https://github.com/NixOS/patchelf/releases/download/0.16.0/patchelf-0.16.0-i686.tar.gz | tar -zxv --strip-components=1 -C /usr/local ; \
+    curl -sSLo - https://github.com/NixOS/patchelf/releases/download/0.16.0/patchelf-0.15.0-i686.tar.gz | tar -zxv --strip-components=1 -C /usr/local ; \
     else \
-    curl -sSLo - https://github.com/NixOS/patchelf/releases/download/0.16.0/patchelf-0.16.0-$(uname -m).tar.gz | tar -zxv --strip-components=1 -C /usr/local ; \
+    curl -sSLo - https://github.com/NixOS/patchelf/releases/download/0.16.0/patchelf-0.15.0-$(uname -m).tar.gz | tar -zxv --strip-components=1 -C /usr/local ; \
     fi 
 
 USER arm
