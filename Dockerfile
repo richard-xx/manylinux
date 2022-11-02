@@ -97,5 +97,10 @@ RUN if [[ "$(dpkg --print-architecture)" = i386 ]]; then \
     curl -sSLo - https://github.com/NixOS/patchelf/releases/download/0.16.0/patchelf-0.15.0-$(uname -m).tar.gz | tar -zxv --strip-components=1 -C /usr/local ; \
     fi 
 
+RUN apt-get update -qq \
+    && apt-get install apt-transport-https \
+    && apt clean autoclean \
+    && rm -rf /var/lib/{apt,cache,log}
+
 USER arm
 WORKDIR /io
