@@ -1,0 +1,26 @@
+FROM ubuntu:22.04 AS base
+WORKDIR /rootfs
+ENV DEBIAN_FRONTEND=noninteractive
+ENV TZ='Asia/Shanghai'
+RUN ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
+    && apt update && apt install -y wget xz-utils \
+    && wget -nv https://downloads.raspberrypi.org/raspbian_lite/archive/2019-06-24-07:07/root.tar.xz \
+    && tar -Jxf root.tar.xz \
+    && rm -rf root.tar.xz \
+    && ls -alh
+
+FROM scratch
+COPY --from=base /rootfs /
+CMD ["bash"]
+ENV DEBIAN_FRONTEND=noninteractive
+ENV TZ='Asia/Shanghai'
+RUN ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
+    && sudo apt update -qq \
+    && sudo apt upgrade -y \
+    && sudo apt-get install --no-install-recommends -qq -y apt-utils dialog \
+    && sudo apt-get install --no-install-recommends -qq -y wget curl ca-certificates \
+    sudo git g++ make build-essential zlib1g-dev apt-transport-https \
+    libbz2-dev libreadline-dev libsqlite3-dev llvm libncursesw5-dev xz-utils tk-dev \
+    libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev unzip ccache cmake \
+    && sudo apt clean autoclean \
+    && sudo rm -rf /var/lib/{apt,cache,log} 
