@@ -4,10 +4,10 @@ ENV SHELL=/bin/bash
 SHELL ["/bin/bash","-c"]
 
 ENV DEBIAN_FRONTEND=noninteractive
-ENV MANYLINUX_CPPFLAGS="-Wdate-time -D_FORTIFY_SOURCE=2"
+ENV MANYLINUX_CPPFLAGS="-Wdate-time -D_FORTIFY_SOURCE=2 -I/usr/local/ssl/include"
 ENV MANYLINUX_CFLAGS="-g -O2 -Wall -fdebug-prefix-map=/=. -fstack-protector-strong -Wformat -Werror=format-security"
 ENV MANYLINUX_CXXFLAGS="-g -O2 -Wall -fdebug-prefix-map=/=. -fstack-protector-strong -Wformat -Werror=format-security"
-ENV MANYLINUX_LDFLAGS="-Wl,-Bsymbolic-functions -Wl,-z,relro -Wl,-z,now"
+ENV MANYLINUX_LDFLAGS="-Wl,-Bsymbolic-functions -Wl,-z,relro -Wl,-z,now -L/usr/local/ssl/lib -Wl,-rpath,/usr/local/ssl/lib"
 
 COPY pip.conf /etc/
 
@@ -26,35 +26,35 @@ RUN curl -sSL https://bootstrap.pypa.io/pip/3.6/get-pip.py | /opt/_internal/cpyt
 RUN cd pyenv/plugins/python-build \
     && git pull \
     && sudo bash ./install.sh \
-    && env PYTHON_MAKE_OPTS="-j$(nproc)" CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
+    && env PYTHON_MAKE_OPTS="-j$(nproc)" CONFIGURE_OPTS="-with-openssl=/usr/local/ssl" CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
     PYTHON_CONFIGURE_OPTS="--enable-shared --with-openssl-rpath=auto --with-ensurepip=no" python-build 3.7.15 /opt/_internal/cpython-3.7.15
 RUN curl -sSL https://bootstrap.pypa.io/get-pip.py | /opt/_internal/cpython-3.7.15/bin/python -
 
 RUN cd pyenv/plugins/python-build \
     && git pull \
     && sudo bash ./install.sh \
-    && env PYTHON_MAKE_OPTS="-j$(nproc)" CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
+    && env PYTHON_MAKE_OPTS="-j$(nproc)" CONFIGURE_OPTS="-with-openssl=/usr/local/ssl" CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
     PYTHON_CONFIGURE_OPTS="--enable-shared --with-openssl-rpath=auto --with-ensurepip=no" python-build 3.8.15 /opt/_internal/cpython-3.8.15
 RUN curl -sSL https://bootstrap.pypa.io/get-pip.py | /opt/_internal/cpython-3.8.15/bin/python -
 
 RUN cd pyenv/plugins/python-build \
     && git pull \
     && sudo bash ./install.sh \
-    && env PYTHON_MAKE_OPTS="-j$(nproc)" CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
+    && env PYTHON_MAKE_OPTS="-j$(nproc)" CONFIGURE_OPTS="-with-openssl=/usr/local/ssl" CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
     PYTHON_CONFIGURE_OPTS="--enable-shared --with-openssl-rpath=auto --with-ensurepip=no" python-build 3.9.15 /opt/_internal/cpython-3.9.15
 RUN curl -sSL https://bootstrap.pypa.io/get-pip.py | /opt/_internal/cpython-3.9.15/bin/python -
 
 RUN cd pyenv/plugins/python-build \
     && git pull \
     && sudo bash ./install.sh \
-    && env PYTHON_MAKE_OPTS="-j$(nproc)" CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
+    && env PYTHON_MAKE_OPTS="-j$(nproc)" CONFIGURE_OPTS="-with-openssl=/usr/local/ssl" CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
     PYTHON_CONFIGURE_OPTS="--enable-shared --with-openssl-rpath=auto --with-ensurepip=no" python-build 3.10.8 /opt/_internal/cpython-3.10.8
 RUN curl -sSL https://bootstrap.pypa.io/get-pip.py | /opt/_internal/cpython-3.10.8/bin/python -
 
 RUN cd pyenv/plugins/python-build \
     && git pull \
     && sudo bash ./install.sh \
-    && env PYTHON_MAKE_OPTS="-j$(nproc)" CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
+    && env PYTHON_MAKE_OPTS="-j$(nproc)" CONFIGURE_OPTS="-with-openssl=/usr/local/ssl" CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
     PYTHON_CONFIGURE_OPTS="--enable-shared --with-openssl-rpath=auto --with-ensurepip=no" python-build 3.11.0 /opt/_internal/cpython-3.11.0
 RUN curl -sSL https://bootstrap.pypa.io/get-pip.py | /opt/_internal/cpython-3.11.0/bin/python -
 
