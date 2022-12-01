@@ -11,20 +11,6 @@ ENV MANYLINUX_LDFLAGS="-Wl,-Bsymbolic-functions -Wl,-z,relro -Wl,-z,now"
 
 COPY pip.conf /etc/
 
-RUN sudo apt-get remove -y libssl-dev \
-    && git clone --branch OpenSSL_1_1_1-stable --recurse-submodules https://github.com/openssl/openssl.git --depth 1 \
-    && cd openssl \
-    && ./config --prefix=/usr/local/ssl --openssldir=/usr/local/ssl CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC -Wl,-rpath=/usr/local/ssl/lib -Wl,--enable-new-dtags" \
-    && make -j > /dev/null \
-    && sudo make install_sw  -j \
-    && cd ../ \
-    && sudo rm -rf openssl \
-    && sudo ldconfig
-
-RUN git clone https://github.com/pyenv/pyenv.git --depth 1 \
-    && cd pyenv/plugins/python-build \
-    && sudo bash ./install.sh
-    
 RUN env PYTHON_MAKE_OPTS="-j$(nproc)" CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
     PYTHON_CONFIGURE_OPTS="--enable-shared --with-openssl-rpath=auto --with-ensurepip=no" python-build 2.7.18 /opt/_internal/cpython-2.7.18
 RUN curl -sSL https://bootstrap.pypa.io/pip/2.7/get-pip.py | /opt/_internal/cpython-2.7.18/bin/python -

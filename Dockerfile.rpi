@@ -24,3 +24,22 @@ RUN ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev unzip ccache cmake \
     && sudo apt clean autoclean \
     && sudo rm -rf /var/lib/{apt,cache,log} 
+    
+ENV MANYLINUX_CPPFLAGS="-Wdate-time -D_FORTIFY_SOURCE=2"
+ENV MANYLINUX_CFLAGS="-g -O2 -Wall -fdebug-prefix-map=/=. -fstack-protector-strong -Wformat -Werror=format-security"
+ENV MANYLINUX_CXXFLAGS="-g -O2 -Wall -fdebug-prefix-map=/=. -fstack-protector-strong -Wformat -Werror=format-security"
+ENV MANYLINUX_LDFLAGS="-Wl,-Bsymbolic-functions -Wl,-z,relro -Wl,-z,now"
+
+RUN sudo apt-get remove -y libssl-dev \
+    && git clone --branch OpenSSL_1_1_1-stable --recurse-submodules https://github.com/openssl/openssl.git --depth 1 \
+    && cd openssl \
+    && ./config --prefix=/usr/local/ssl --openssldir=/usr/local/ssl CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC -Wl,-rpath=/usr/local/ssl/lib -Wl,--enable-new-dtags" \
+    && make \
+    && sudo make install_sw  -j \
+    && cd ../ \
+    && sudo rm -rf openssl \
+    && sudo ldconfig
+
+RUN git clone https://github.com/pyenv/pyenv.git --depth 1 \
+    && cd pyenv/plugins/python-build \
+    && sudo bash ./install.sh
