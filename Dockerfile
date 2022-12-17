@@ -92,15 +92,9 @@ RUN curl -sSL https://bootstrap.pypa.io/get-pip.py | /opt/_internal/cpython-3.11
 COPY finalize.sh python-tag-abi-tag.py /tmp/
 RUN /tmp/finalize.sh
 
-RUN if [[ "$(dpkg --print-architecture)" = i386 ]]; then \
-    url=$(curl https://api.github.com/repos/NixOS/patchelf/releases/latest \
-    | egrep "https://github.com/NixOS/patchelf/releases/download/.*?i686" \
-    | cut -d : f 2,3 | tr -d '"' | tr -d '[:space:]'); \
-    else \
-    url=$(curl https://api.github.com/repos/NixOS/patchelf/releases/latest \
+RUN url=$(curl https://api.github.com/repos/NixOS/patchelf/releases/latest \
     | egrep "https://github.com/NixOS/patchelf/releases/download/.*?$(uname -m)" \
-    | cut -d : -f 2,3 | tr -d '"' | tr -d '[:space:]'); \
-    fi \
+    | cut -d : -f 2,3 | tr -d '"' | tr -d '[:space:]') \
     && curl -sSLo - ${url} | tar -zxv --strip-components=1 -C /usr/local
 
 USER arm
