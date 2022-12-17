@@ -16,7 +16,7 @@ RUN ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && mkdir -p /usr/local/share/keyrings \
     && curl -fsSL "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x0FFB30A4102243D5" \
     | gpg --dearmor | tee /usr/local/share/keyrings/richard-cmake.gpg > /dev/null \
-    && echo "deb [signed-by=/usr/local/share/keyrings/richard-cmake.gpg] https://ppa.launchpad.net/richard-deng/cmake/ubuntu xenial main" \
+    && echo "deb [signed-by=/usr/local/share/keyrings/richard-cmake.gpg] https://ppa.launchpadcontent.net/richard-deng/cmake/ubuntu/ xenial main" \
     | tee /etc/apt/sources.list.d/richard-deng-ubuntu-cmake.list \
     && apt update -qq \
     && apt install --no-install-recommends -qq -y sudo git make build-essential libssl-dev zlib1g-dev \
