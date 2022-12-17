@@ -30,7 +30,7 @@ RUN ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && adduser arm sudo \
     && echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers \
     && echo "[global]" >> /etc/pip.conf \
-    && echo "extra-index-url=https://mirrors.cernet.edu.cn/pypi/simple https://mirrors.tuna.tsinghua.edu.cn/pypi/simple" >> /etc/pip.conf \
+    && echo "extra-index-url=https://mirrors.cernet.edu.cn/pypi/simple https://pypi.tuna.tsinghua.edu.cn//simple" >> /etc/pip.conf \
     && echo "trusted-host = mirrors.cernet.edu.cn pypi.tuna.tsinghua.edu.cn pypi.org" >> /etc/pip.conf
 
 # RUN apt remove -y libssl-dev \
