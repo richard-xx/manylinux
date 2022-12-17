@@ -12,7 +12,6 @@ RUN ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && apt update -qq \
     && apt install --no-install-recommends -qq -y apt-utils dialog \
     && apt install --no-install-recommends -qq -y wget curl ca-certificates apt-transport-https \
-    && sed -i "s#http:#https:#g" /etc/apt/sources.list \
     && mkdir -p /usr/local/share/keyrings \
     && curl -fsSL "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x0FFB30A4102243D5" \
     | gpg --dearmor | tee /usr/local/share/keyrings/richard-cmake.gpg > /dev/null \
