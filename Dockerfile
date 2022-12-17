@@ -9,18 +9,21 @@ ENV MANYLINUX_CFLAGS="-g -O2 -Wall -fdebug-prefix-map=/=. -fstack-protector-stro
 ENV MANYLINUX_CXXFLAGS="-g -O2 -Wall -fdebug-prefix-map=/=. -fstack-protector-strong -Wformat -Werror=format-security"
 ENV MANYLINUX_LDFLAGS="-Wl,-Bsymbolic-functions -Wl,-z,relro -Wl,-z,now"
 RUN ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
-    && apt-get update -qq \
-    && apt-get install --no-install-recommends -qq -y apt-utils dialog \
-    && apt-get install --no-install-recommends -qq wget curl ca-certificates \
+    && apt update -qq \
+    && apt install --no-install-recommends -qq -y apt-utils dialog \
+    && apt install --no-install-recommends -qq wget curl ca-certificates apt-transport-https \
+    && sed -i "s#http:#https:#g" /etc/apt/sources.list
     && mkdir -p /usr/local/share/keyrings \
-    && curl -fsSL "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x0FFB30A4102243D5" | gpg --dearmor | tee /usr/local/share/keyrings/richard-cmake.gpg > /dev/null \
-    && echo "deb [signed-by=/usr/local/share/keyrings/richard-cmake.gpg] http://ppa.launchpad.net/richard-deng/cmake/ubuntu xenial main" | tee /etc/apt/sources.list.d/richard-deng-ubuntu-cmake.list \
-    && apt-get update -qq \
-    && apt-get install --no-install-recommends -qq -y sudo git make build-essential libssl-dev zlib1g-dev \
+    && curl -fsSL "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x0FFB30A4102243D5" \
+    | gpg --dearmor | tee /usr/local/share/keyrings/richard-cmake.gpg > /dev/null \
+    && echo "deb [signed-by=/usr/local/share/keyrings/richard-cmake.gpg] https://ppa.launchpad.net/richard-deng/cmake/ubuntu xenial main" \
+    | tee /etc/apt/sources.list.d/richard-deng-ubuntu-cmake.list \
+    && apt update -qq \
+    && apt install --no-install-recommends -qq -y sudo git make build-essential libssl-dev zlib1g-dev \
     libbz2-dev libreadline-dev libsqlite3-dev llvm libncursesw5-dev xz-utils tk-dev \
     libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev unzip ccache cmake openssl \
     && if [[ "$(dpkg --print-architecture)" = i386 ]]; then \
-    apt-get --no-install-recommends -qq -y install gcc-multilib g++-multilib ; \
+    apt --no-install-recommends -qq -y install gcc-multilib g++-multilib ; \
     fi \
     && apt clean autoclean \
     && rm -rf /var/lib/{apt,cache,log} \
@@ -28,9 +31,8 @@ RUN ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && adduser arm sudo \
     && echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers \
     && echo "[global]" >> /etc/pip.conf \
-    && echo "extra-index-url=https://pypi.tuna.tsinghua.edu.cn/simple" >> /etc/pip.conf \
-    && echo "trusted-host = pypi.tuna.tsinghua.edu.cn" >> /etc/pip.conf \
-    && echo "               pypi.org" >> /etc/pip.conf
+    && echo "extra-index-url=https://mirrors.cernet.edu.cn/pypi/simple https://mirrors.tuna.tsinghua.edu.cn/pypi/simple" >> /etc/pip.conf \
+    && echo "trusted-host = mirrors.cernet.edu.cn pypi.tuna.tsinghua.edu.cn pypi.org" >> /etc/pip.conf
 
 # RUN apt remove -y libssl-dev \
 #     && curl -sSLo openssl_1.1.1n.deb https://github.com/richard-xx/manylinux/releases/download/OpenSSL_1_1_1n/openssl_1.1.1n-1_"$(dpkg --print-architecture)".deb \
@@ -97,11 +99,6 @@ RUN if [[ "$(dpkg --print-architecture)" = i386 ]]; then \
     url=$(curl https://api.github.com/repos/NixOS/patchelf/releases/latest | egrep "https://github.com/NixOS/patchelf/releases/download/.*?$(uname -m)" | cut -d : -f 2,3 | tr -d '"' ); \
     fi \
     && curl -sSLo - ${url} | tar -zxv --strip-components=1 -C /usr/local
-
-RUN apt-get update -qq \
-    && apt-get install apt-transport-https \
-    && apt clean autoclean \
-    && rm -rf /var/lib/{apt,cache,log}
 
 USER arm
 WORKDIR /io
