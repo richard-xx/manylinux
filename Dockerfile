@@ -51,12 +51,12 @@ RUN /tmp/finalize.sh
 
 RUN if [[ "$(dpkg --print-architecture)" = i386 ]]; then \
     url=$(curl https://api.github.com/repos/NixOS/patchelf/releases/latest \
-    | egrep "https://github.com/NixOS/patchelf/releases/download/.*?i686" \
-    | cut -d : f 2,3 | tr -d '"' | tr -d '[:space:]'); \
+    | egrep "https://github.com/NixOS/patchelf/releases/download/.*?i686"); \
+    && url=$(echo ${url#*:} | tr -d '"' | tr -d '[:space:]'); \
     else \
     url=$(curl https://api.github.com/repos/NixOS/patchelf/releases/latest \
-    | egrep "https://github.com/NixOS/patchelf/releases/download/.*?$(uname -m)" \
-    | cut -d : -f 2,3 | tr -d '"' | tr -d '[:space:]'); \
+    | egrep "https://github.com/NixOS/patchelf/releases/download/.*?$(uname -m)"); \
+    && url=$(echo ${url#*:} | tr -d '"' | tr -d '[:space:]'); \
     fi \
     && curl -sSLo - ${url} | tar -zxv --strip-components=1 -C /usr/local
 
