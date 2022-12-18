@@ -6,7 +6,7 @@ set -exuo pipefail
 mkdir /opt/python
 find /opt/_internal/ -mindepth 1 -maxdepth 1 \( -name 'cpython*' -o -name 'pypy*' \) -print0 | while IFS= read -r -d '' PREFIX
 do
-  "${PREFIX}"/bin/python -m pip install -U build certifi wheel
+  "${PREFIX}"/bin/python -m pip install -U build certifi wheel setuptools
   ABI_TAG=$("${PREFIX}"/bin/python /tmp/python-tag-abi-tag.py)
   ln -s "${PREFIX}" /opt/python/"${ABI_TAG}"
 done
