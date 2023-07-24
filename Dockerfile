@@ -49,5 +49,12 @@ RUN cd /pyenv/plugins/python-build \
 COPY finalize.sh python-tag-abi-tag.py /tmp/
 RUN /tmp/finalize.sh
 
+RUN if [[ "$(dpkg --print-architecture)" = i386 ]]; then \
+    url=$(curl https://api.github.com/repos/NixOS/patchelf/releases/88491801 | egrep "https://github.com/NixOS/patchelf/releases/download/.*?i686" | cut -d : f 2,3 | tr -d '"' ); \
+    else \
+    url=$(curl https://api.github.com/repos/NixOS/patchelf/releases/88491801 | egrep "https://github.com/NixOS/patchelf/releases/download/.*?$(uname -m)" | cut -d : -f 2,3 | tr -d '"' ); \
+    fi \
+    && curl -sSLo - ${url} | tar -zxv --strip-components=1 -C /usr/local
+
 USER arm
 WORKDIR /io
