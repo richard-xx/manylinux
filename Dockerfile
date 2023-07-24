@@ -15,50 +15,39 @@ RUN cd /pyenv/plugins/python-build \
     && git pull \
     && sudo bash ./install.sh \
     && env PYTHON_MAKE_OPTS="-j$(nproc)" CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
-    PYTHON_CONFIGURE_OPTS="--enable-shared --with-openssl-rpath=auto --with-ensurepip=no" python-build 3.7.16 /opt/_internal/cpython-3.7.16 \
-    && curl -sSL https://bootstrap.pypa.io/get-pip.py | /opt/_internal/cpython-3.7.16/bin/python -
+    PYTHON_CONFIGURE_OPTS="--enable-shared --with-openssl-rpath=auto --with-ensurepip=no" python-build 3.7.17 /opt/_internal/cpython-3.7.17 \
+    && curl -sSL https://bootstrap.pypa.io/get-pip.py | /opt/_internal/cpython-3.7.17/bin/python -
 
 RUN cd /pyenv/plugins/python-build \
     && git pull \
     && sudo bash ./install.sh \
     && env PYTHON_MAKE_OPTS="-j$(nproc)" CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
-    PYTHON_CONFIGURE_OPTS="--enable-shared --with-openssl-rpath=auto --with-ensurepip=no" python-build 3.8.16 /opt/_internal/cpython-3.8.16 \
-    && curl -sSL https://bootstrap.pypa.io/get-pip.py | /opt/_internal/cpython-3.8.16/bin/python -
+    PYTHON_CONFIGURE_OPTS="--enable-shared --with-openssl-rpath=auto --with-ensurepip=no" python-build 3.8.17 /opt/_internal/cpython-3.8.17 \
+    && curl -sSL https://bootstrap.pypa.io/get-pip.py | /opt/_internal/cpython-3.8.17/bin/python -
 
 RUN cd /pyenv/plugins/python-build \
     && git pull \
     && sudo bash ./install.sh \
     && env PYTHON_MAKE_OPTS="-j$(nproc)" CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
-    PYTHON_CONFIGURE_OPTS="--enable-shared --with-openssl-rpath=auto --with-ensurepip=no" python-build 3.9.16 /opt/_internal/cpython-3.9.16 \
-    && curl -sSL https://bootstrap.pypa.io/get-pip.py | /opt/_internal/cpython-3.9.16/bin/python -
+    PYTHON_CONFIGURE_OPTS="--enable-shared --with-openssl-rpath=auto --with-ensurepip=no" python-build 3.9.17 /opt/_internal/cpython-3.9.17 \
+    && curl -sSL https://bootstrap.pypa.io/get-pip.py | /opt/_internal/cpython-3.9.17/bin/python -
 
 RUN cd /pyenv/plugins/python-build \
     && git pull \
     && sudo bash ./install.sh \
     && env PYTHON_MAKE_OPTS="-j$(nproc)" CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
-    PYTHON_CONFIGURE_OPTS="--enable-shared --with-openssl-rpath=auto --with-ensurepip=no" python-build 3.10.11 /opt/_internal/cpython-3.10.11 \
-    && curl -sSL https://bootstrap.pypa.io/get-pip.py | /opt/_internal/cpython-3.10.11/bin/python -
+    PYTHON_CONFIGURE_OPTS="--enable-shared --with-openssl-rpath=auto --with-ensurepip=no" python-build 3.10.12 /opt/_internal/cpython-3.10.12 \
+    && curl -sSL https://bootstrap.pypa.io/get-pip.py | /opt/_internal/cpython-3.10.12/bin/python -
 
 RUN cd /pyenv/plugins/python-build \
     && git pull \
     && sudo bash ./install.sh \
     && env PYTHON_MAKE_OPTS="-j$(nproc)" CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
-    PYTHON_CONFIGURE_OPTS="--enable-shared --with-openssl-rpath=auto --with-ensurepip=no" python-build 3.11.3 /opt/_internal/cpython-3.11.3 \
-    && curl -sSL https://bootstrap.pypa.io/get-pip.py | /opt/_internal/cpython-3.11.3/bin/python -
+    PYTHON_CONFIGURE_OPTS="--enable-shared --with-openssl-rpath=auto --with-ensurepip=no" python-build 3.11.4 /opt/_internal/cpython-3.11.4 \
+    && curl -sSL https://bootstrap.pypa.io/get-pip.py | /opt/_internal/cpython-3.11.4/bin/python -
 
 COPY finalize.sh python-tag-abi-tag.py /tmp/
 RUN /tmp/finalize.sh
-
-RUN if [[ "$(dpkg --print-architecture)" = i386 ]]; then \
-    url=$(curl https://api.github.com/repos/NixOS/patchelf/releases/latest \
-    | egrep "https://github.com/NixOS/patchelf/releases/download/.*?i686"); \
-    url=$(echo ${url#*:} | tr -d '"' | tr -d '[:space:]'); \
-    else \
-    url=$(curl https://api.github.com/repos/NixOS/patchelf/releases/latest \
-    | egrep "https://github.com/NixOS/patchelf/releases/download/.*?$(uname -m)"); \
-    url=$(echo ${url#*:} | tr -d '"' | tr -d '[:space:]'); \
-    fi \
-    && curl -sSLo - ${url} | tar -zxv --strip-components=1 -C /usr/local
 
 USER arm
 WORKDIR /io

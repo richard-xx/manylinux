@@ -21,4 +21,5 @@ echo -e '#!/bin/bash\n\nset -euo pipefail\n\nif [ $(id -u) -eq 0 ]; then\n\texpo
 chmod 755 /usr/local/bin/pipx
 deactivate
 
-pipx install auditwheel
+pipx install -U auditwheel
+pipx install -U patchelf
