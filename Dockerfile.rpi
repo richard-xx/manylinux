@@ -1,17 +1,4 @@
-FROM ubuntu:22.04 AS base
-WORKDIR /rootfs
-ENV DEBIAN_FRONTEND=noninteractive
-ENV TZ='Asia/Shanghai'
-RUN ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
-    && apt update && apt install -y wget xz-utils \
-    && wget -nv https://downloads.raspberrypi.org/raspbian_lite/archive/2019-06-24-07:07/root.tar.xz \
-    && tar -Jxf root.tar.xz \
-    && rm -rf root.tar.xz \
-    && ls -alh
-
-FROM scratch
-COPY --from=base /rootfs /
-CMD ["bash"]
+FROM richardarducam/raspios_lite_armhf:stretch-20190408
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ='Asia/Shanghai'
 RUN ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \

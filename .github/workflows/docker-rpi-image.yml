@@ -73,6 +73,7 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE }} 
           tags: |
             type=raw,value=rpi_stretch
+            type=raw,value=rpi_9
 
       # 构建并上传
       - name: Build and push
