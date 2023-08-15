@@ -8,14 +8,31 @@ RUN ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && sudo apt-get install --no-install-recommends -qq -y wget curl ca-certificates \
     sudo git g++ make build-essential zlib1g-dev apt-transport-https \
     libbz2-dev libreadline-dev libsqlite3-dev llvm libncursesw5-dev xz-utils tk-dev \
-    libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev unzip ccache cmake \
+    libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev unzip ccache cmake python3-pip \
     && sudo apt clean autoclean \
-    && sudo rm -rf /var/lib/{apt,cache,log} 
+    && sudo rm -rf /var/lib/{apt,cache,log} \
+    && sudo python3 -m pip install -U pip \
+FROM richardarducam/raspios_lite_armhf:stretch-20190408
+ENV DEBIAN_FRONTEND=noninteractive
+ENV TZ='Asia/Shanghai'
+RUN ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
+    && sudo apt update -qq \
+    && sudo apt upgrade -y \
+    && sudo apt-get install --no-install-recommends -qq -y apt-utils dialog \
+    && sudo apt-get install --no-install-recommends -qq -y wget curl ca-certificates \
+    sudo git g++ make build-essential zlib1g-dev apt-transport-https \
+    libbz2-dev libreadline-dev libsqlite3-dev llvm libncursesw5-dev xz-utils tk-dev \
+    libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev unzip ccache cmake python3-pip \
+    && sudo apt clean autoclean \
+    && sudo rm -rf /var/lib/{apt,cache,log} \
+    && sudo python3 -m pip install -U pip \
+  
     
 ENV MANYLINUX_CPPFLAGS="-Wdate-time -D_FORTIFY_SOURCE=2"
 ENV MANYLINUX_CFLAGS="-g -O2 -Wall -fdebug-prefix-map=/=. -fstack-protector-strong -Wformat -Werror=format-security"
 ENV MANYLINUX_CXXFLAGS="-g -O2 -Wall -fdebug-prefix-map=/=. -fstack-protector-strong -Wformat -Werror=format-security"
 ENV MANYLINUX_LDFLAGS="-Wl,-Bsymbolic-functions -Wl,-z,relro -Wl,-z,now"
+
 
 RUN sudo apt-get remove -y libssl-dev \
     && git clone --branch OpenSSL_1_1_1-stable --recurse-submodules https://github.com/openssl/openssl.git --depth 1 \
@@ -27,6 +44,42 @@ RUN sudo apt-get remove -y libssl-dev \
     && sudo rm -rf openssl \
     && sudo ldconfig
 
-RUN git clone https://github.com/pyenv/pyenv.git --depth 1 \
+
+RUN git clone https:github.com/pyenv/pyenv.git --depth 1 \
+    && cd pyenv/plugins/python-build \
+    && sudo bash ./install.shFROM richardarducam/raspios_lite_armhf:stretch-20190408
+ENV DEBIAN_FRONTEND=noninteractive
+ENV TZ='Asia/Shanghai'
+RUN ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
+    && sudo apt update -qq \
+    && sudo apt upgrade -y \
+    && sudo apt-get install --no-install-recommends -qq -y apt-utils dialog \
+    && sudo apt-get install --no-install-recommends -qq -y wget curl ca-certificates \
+    sudo git g++ make build-essential zlib1g-dev apt-transport-https \
+    libbz2-dev libreadline-dev libsqlite3-dev llvm libncursesw5-dev xz-utils tk-dev \
+    libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev unzip ccache cmake python3-pip \
+    && sudo apt clean autoclean \
+    && sudo rm -rf /var/lib/{apt,cache,log} \
+    && sudo python3 -m pip install -U pip \
+    && sudo python3 -m pip install --prefer-binary cmake patchelf ninja
+    
+ENV MANYLINUX_CPPFLAGS="-Wdate-time -D_FORTIFY_SOURCE=2"
+ENV MANYLINUX_CFLAGS="-g -O2 -Wall -fdebug-prefix-map=/=. -fstack-protector-strong -Wformat -Werror=format-security"
+ENV MANYLINUX_CXXFLAGS="-g -O2 -Wall -fdebug-prefix-map=/=. -fstack-protector-strong -Wformat -Werror=format-security"
+ENV MANYLINUX_LDFLAGS="-Wl,-Bsymbolic-functions -Wl,-z,relro -Wl,-z,now"
+
+
+RUN sudo apt-get remove -y libssl-dev \
+    && git clone --branch OpenSSL_1_1_1-stable --recurse-submodules https://github.com/openssl/openssl.git --depth 1 \
+    && cd openssl \
+    && ./config --prefix=/usr/local/ssl --openssldir=/usr/local/ssl CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC -Wl,-rpath=/usr/local/ssl/lib -Wl,--enable-new-dtags" \
+    && make \
+    && sudo make install_sw  -j \
+    && cd ../ \
+    && sudo rm -rf openssl \
+    && sudo ldconfig
+
+
+RUN git clone https:github.com/pyenv/pyenv.git --depth 1 \
     && cd pyenv/plugins/python-build \
     && sudo bash ./install.sh
