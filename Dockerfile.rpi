@@ -1,7 +1,7 @@
 FROM richardarducam/raspios_lite_armhf:stretch-20190408
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ='Asia/Shanghai'
-RUN ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
+RUN sudo ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && sudo apt update -qq \
     && sudo apt upgrade -y \
     && sudo apt-get install --no-install-recommends -qq -y apt-utils dialog \
