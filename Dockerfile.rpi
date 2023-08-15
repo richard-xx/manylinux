@@ -19,6 +19,7 @@ ENV MANYLINUX_CFLAGS="-g -O2 -Wall -fdebug-prefix-map=/=. -fstack-protector-stro
 ENV MANYLINUX_CXXFLAGS="-g -O2 -Wall -fdebug-prefix-map=/=. -fstack-protector-strong -Wformat -Werror=format-security"
 ENV MANYLINUX_LDFLAGS="-Wl,-Bsymbolic-functions -Wl,-z,relro -Wl,-z,now"
 
+USER root
 
 RUN sudo apt-get remove -y libssl-dev \
     && git clone --branch OpenSSL_1_1_1-stable --recurse-submodules https://github.com/openssl/openssl.git --depth 1 \
