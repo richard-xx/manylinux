@@ -8,6 +8,14 @@ ENV MANYLINUX_CPPFLAGS="-Wdate-time -D_FORTIFY_SOURCE=2"
 ENV MANYLINUX_CFLAGS="-g -O2 -Wall -fdebug-prefix-map=/=. -fstack-protector-strong -Wformat -Werror=format-security"
 ENV MANYLINUX_CXXFLAGS="-g -O2 -Wall -fdebug-prefix-map=/=. -fstack-protector-strong -Wformat -Werror=format-security"
 ENV MANYLINUX_LDFLAGS="-Wl,-Bsymbolic-functions -Wl,-z,relro -Wl,-z,now"
+
+# 获取主机架构并赋值给 AUDITWHEEL_ARCH 环境变量
+RUN export AUDITWHEEL_ARCH=$(uname -m) && \
+    echo "AUDITWHEEL_ARCH is set to $AUDITWHEEL_ARCH"
+
+ENV AUDITWHEEL_POLICY=manylinux_2_24
+ENV AUDITWHEEL_PLAT=${AUDITWHEEL_POLICY}_${AUDITWHEEL_ARCH}
+
 RUN ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && apt update -qq \
     && apt install --no-install-recommends -qq -y apt-utils dialog \
