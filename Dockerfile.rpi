@@ -3,6 +3,19 @@ ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ='Asia/Shanghai'
 USER root
 
+ENV MANYLINUX_CPPFLAGS="-Wdate-time -D_FORTIFY_SOURCE=2"
+ENV MANYLINUX_CFLAGS="-g -O2 -Wall -fdebug-prefix-map=/=. -fstack-protector-strong -Wformat -Werror=format-security"
+ENV MANYLINUX_CXXFLAGS="-g -O2 -Wall -fdebug-prefix-map=/=. -fstack-protector-strong -Wformat -Werror=format-security"
+ENV MANYLINUX_LDFLAGS="-Wl,-Bsymbolic-functions -Wl,-z,relro -Wl,-z,now"
+ENV MACHINE=armv6
+
+# 获取主机架构并赋值给 AUDITWHEEL_ARCH 环境变量
+RUN export AUDITWHEEL_ARCH=$(uname -m) && \
+    echo "AUDITWHEEL_ARCH is set to $AUDITWHEEL_ARCH"
+
+ENV AUDITWHEEL_POLICY=manylinux_2_24
+ENV AUDITWHEEL_PLAT=${AUDITWHEEL_POLICY}_${AUDITWHEEL_ARCH}
+
 RUN ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && apt update -qq \
     && apt upgrade -y \
@@ -16,12 +29,6 @@ RUN ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && python3 -m pip install -U pip \
     && python3 -m pip install --prefer-binary cmake patchelf ninja
     
-ENV MANYLINUX_CPPFLAGS="-Wdate-time -D_FORTIFY_SOURCE=2"
-ENV MANYLINUX_CFLAGS="-g -O2 -Wall -fdebug-prefix-map=/=. -fstack-protector-strong -Wformat -Werror=format-security"
-ENV MANYLINUX_CXXFLAGS="-g -O2 -Wall -fdebug-prefix-map=/=. -fstack-protector-strong -Wformat -Werror=format-security"
-ENV MANYLINUX_LDFLAGS="-Wl,-Bsymbolic-functions -Wl,-z,relro -Wl,-z,now"
-ENV MACHINE=armv6
-
 RUN apt-get remove -y libssl-dev \
     && git clone --branch OpenSSL_1_1_1-stable --recurse-submodules https://github.com/openssl/openssl.git --depth 1 \
     && cd openssl \
