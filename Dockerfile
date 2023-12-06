@@ -43,8 +43,8 @@ RUN cd /pyenv/plugins/python-build \
     && git pull \
     && sudo bash ./install.sh \
     && env PYTHON_MAKE_OPTS="-j$(nproc)" CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
-    PYTHON_CONFIGURE_OPTS="--enable-shared --with-openssl-rpath=auto --with-ensurepip=no" python-build 3.11.6 /opt/_internal/cpython-3.11.6 \
-    && curl -sSL https://bootstrap.pypa.io/get-pip.py | /opt/_internal/cpython-3.11.6/bin/python -
+    PYTHON_CONFIGURE_OPTS="--enable-shared --with-openssl-rpath=auto --with-ensurepip=no" python-build 3.11.6 /opt/_internal/cpython-3.11.7 \
+    && curl -sSL https://bootstrap.pypa.io/get-pip.py | /opt/_internal/cpython-3.11.7/bin/python -
 
 RUN cd /pyenv/plugins/python-build \
     && git pull \
