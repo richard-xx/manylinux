@@ -55,9 +55,9 @@ jobs:
 
       - name: Get Time
         id: time
-        uses: nanzm/get-time-action@v1.1
+        uses: josStorer/get-current-time@v2
         with:
-          timeZone: 8
+          utcOffset: "+08:00"
           format: 'YYMMDDHH'
 
       # 根据输入自动生成 tag 和 label 等数据，说明见下
