@@ -55,15 +55,15 @@ RUN cd /pyenv/plugins/python-build \
     && git pull \
     && sudo bash ./install.sh \
     && env PYTHON_MAKE_OPTS="-j$(nproc)" CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
-    PYTHON_CONFIGURE_OPTS="--enable-shared --with-openssl-rpath=auto --with-ensurepip=no" python-build 3.11.6 /opt/_internal/cpython-3.11.7 \
-    && curl -sSL https://bootstrap.pypa.io/get-pip.py | /opt/_internal/cpython-3.11.7/bin/python -
+    PYTHON_CONFIGURE_OPTS="--enable-shared --with-openssl-rpath=auto --with-ensurepip=no" python-build 3.11.8 /opt/_internal/cpython-3.11.8 \
+    && curl -sSL https://bootstrap.pypa.io/get-pip.py | /opt/_internal/cpython-3.11.8/bin/python -
 
 RUN cd /pyenv/plugins/python-build \
     && git pull \
     && sudo bash ./install.sh \
     && env PYTHON_MAKE_OPTS="-j$(nproc)" CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
-    PYTHON_CONFIGURE_OPTS="--enable-shared --with-openssl-rpath=auto --with-ensurepip=no" python-build 3.12.0 /opt/_internal/cpython-3.12.0 \
-    && curl -sSL https://bootstrap.pypa.io/get-pip.py | /opt/_internal/cpython-3.12.0/bin/python -
+    PYTHON_CONFIGURE_OPTS="--enable-shared --with-openssl-rpath=auto --with-ensurepip=no" python-build 3.12.2 /opt/_internal/cpython-3.12.2 \
+    && curl -sSL https://bootstrap.pypa.io/get-pip.py | /opt/_internal/cpython-3.12.2/bin/python -
 
 COPY finalize.sh python-tag-abi-tag.py /tmp/
 RUN /tmp/finalize.sh
