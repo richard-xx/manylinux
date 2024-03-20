@@ -47,15 +47,19 @@ RUN git clone https://github.com/pyenv/pyenv.git --depth 1 \
     
 RUN env PYTHON_MAKE_OPTS="-j$(nproc)" CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
     PYTHON_CONFIGURE_OPTS="--enable-shared --with-openssl-rpath=auto --with-ensurepip=no" python-build 2.7.18 /opt/_internal/cpython-2.7.18 \
-    && curl -sSL https://bootstrap.pypa.io/pip/2.7/get-pip.py | /opt/_internal/cpython-2.7.18/bin/python -
+    && curl -fsSL https://bootstrap.pypa.io/pip/2.7/get-pip.py | /opt/_internal/cpython-2.7.18/bin/python -
 
 RUN env PYTHON_MAKE_OPTS="-j$(nproc)" CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
     PYTHON_CONFIGURE_OPTS="--enable-shared --with-openssl-rpath=auto --with-ensurepip=no" python-build 3.5.10 /opt/_internal/cpython-3.5.10 \
-    && curl -sSL https://bootstrap.pypa.io/pip/3.5/get-pip.py | /opt/_internal/cpython-3.5.10/bin/python -
+    && curl -fsSL https://bootstrap.pypa.io/pip/3.5/get-pip.py | /opt/_internal/cpython-3.5.10/bin/python -
 
 RUN env PYTHON_MAKE_OPTS="-j$(nproc)" CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
     PYTHON_CONFIGURE_OPTS="--enable-shared --with-openssl-rpath=auto --with-ensurepip=no" python-build 3.6.15 /opt/_internal/cpython-3.6.15 \
-    && curl -sSL https://bootstrap.pypa.io/pip/3.6/get-pip.py | /opt/_internal/cpython-3.6.15/bin/python -
+    && curl -fsSL https://bootstrap.pypa.io/pip/3.6/get-pip.py | /opt/_internal/cpython-3.6.15/bin/python -
+
+RUN env PYTHON_MAKE_OPTS="-j$(nproc)" CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
+    PYTHON_CONFIGURE_OPTS="--enable-shared --with-openssl-rpath=auto --with-ensurepip=no" python-build 3.7.17 /opt/_internal/cpython-3.7.17 \
+    && curl -fsSL https://bootstrap.pypa.io/get-pip.py | /opt/_internal/cpython-3.7.17/bin/python -
 
 USER arm
 WORKDIR /io
