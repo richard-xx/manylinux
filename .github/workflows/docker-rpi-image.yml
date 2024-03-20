@@ -118,8 +118,8 @@ jobs:
           push: true
           tags: ${{ steps.meta_rpi.outputs.tags }}
           labels: ${{ steps.meta_rpi.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE }}:buildcache
+          cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE }}:buildcache,mode=max
 
       - name: Inspect image
         if: github.event.inputs.image == 'rpi'
