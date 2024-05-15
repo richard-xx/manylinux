@@ -25,10 +25,14 @@ RUN ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     | gpg --dearmor | tee /usr/local/share/keyrings/richard-cmake.gpg > /dev/null \
     && echo "deb [signed-by=/usr/local/share/keyrings/richard-cmake.gpg] https://ppa.launchpadcontent.net/richard-deng/cmake/ubuntu/ xenial main" \
     | tee /etc/apt/sources.list.d/richard-deng-ubuntu-cmake.list \
+    && curl -fsSL "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x60C317803A41BA51845E371A1E9377A2BA9EF27F" \
+    | gpg --dearmor | tee /usr/local/share/keyrings/ubuntu-toolchain-r-keyring.gpg > /dev/null \
+    && echo "deb [signed-by=/usr/local/share/keyrings/ubuntu-toolchain-r-keyring.gpg] https://ppa.launchpadcontent.net/ubuntu-toolchain-r/test/ubuntu/ xenial main" \
+    | tee /etc/apt/sources.list.d/ubuntu-toolchain-r-test.list  \
     && apt update -qq \
     && apt install --no-install-recommends -qq -y sudo git make build-essential libssl-dev zlib1g-dev \
     libbz2-dev libreadline-dev libsqlite3-dev llvm libncursesw5-dev xz-utils tk-dev \
-    libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev unzip ccache cmake openssl \
+    libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev unzip ccache cmake openssl g++-9 \
     && if [[ "$(dpkg --print-architecture)" = i386 ]]; then \
     apt --no-install-recommends -qq -y install gcc-multilib g++-multilib ; \
     fi \
@@ -39,7 +43,8 @@ RUN ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers \
     && echo "[global]" >> /etc/pip.conf \
     && echo "extra-index-url=https://mirrors.cernet.edu.cn/pypi/web/simple https://pypi.tuna.tsinghua.edu.cn//simple" >> /etc/pip.conf \
-    && echo "trusted-host = mirrors.cernet.edu.cn pypi.tuna.tsinghua.edu.cn pypi.org" >> /etc/pip.conf
+    && echo "trusted-host = mirrors.cernet.edu.cn pypi.tuna.tsinghua.edu.cn pypi.org" >> /etc/pip.conf \
+    && update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 90 --slave /usr/bin/g++ g++ /usr/bin/g++-9
 
 RUN git clone https://github.com/pyenv/pyenv.git --depth 1 \
     && cd pyenv/plugins/python-build \
