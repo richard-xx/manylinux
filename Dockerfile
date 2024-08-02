@@ -43,8 +43,8 @@ RUN cd /pyenv/plugins/python-build \
     && git pull \
     && sudo bash ./install.sh \
     && env PYTHON_MAKE_OPTS="-j$(nproc)" CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
-    PYTHON_CONFIGURE_OPTS="--enable-shared --with-openssl-rpath=auto --with-ensurepip=no" python-build 3.12.3 /opt/_internal/cpython-3.12.3 \
-    && curl -fsSL https://bootstrap.pypa.io/get-pip.py | /opt/_internal/cpython-3.12.3/bin/python -
+    PYTHON_CONFIGURE_OPTS="--enable-shared --with-openssl-rpath=auto --with-ensurepip=no" python-build 3.12.4 /opt/_internal/cpython-3.12.4 \
+    && curl -fsSL https://bootstrap.pypa.io/get-pip.py | /opt/_internal/cpython-3.12.4/bin/python -
     
 COPY finalize.sh python-tag-abi-tag.py /tmp/
 RUN /tmp/finalize.sh
