@@ -26,7 +26,7 @@ RUN ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     | tee /etc/apt/sources.list.d/richard-deng-ubuntu-cmake.list \
     curl -fsSL https://richard-xx.github.io/gcc_ppa/PUBLIC.KEY | gpg --dearmor | tee /usr/local/share/keyrings/gcc_ppa.gpg > /dev/null \
     && echo "deb [signed-by=/usr/local/share/keyrings/gcc_ppa.gpg] https://richard-xx.github.io/gcc_ppa linux main" \
-    | tee /etc/apt/sources.list.d/gcc_ppa.list
+    | tee /etc/apt/sources.list.d/gcc_ppa.list \
     && apt update -qq \
     && apt install --no-install-recommends -qq -y sudo git make build-essential libssl-dev zlib1g-dev \
     libbz2-dev libreadline-dev libsqlite3-dev llvm libncursesw5-dev xz-utils tk-dev \
