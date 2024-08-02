@@ -24,7 +24,7 @@ RUN ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     | gpg --dearmor | tee /usr/local/share/keyrings/richard-cmake.gpg > /dev/null \
     && echo "deb [signed-by=/usr/local/share/keyrings/richard-cmake.gpg] https://ppa.launchpadcontent.net/richard-deng/cmake/ubuntu/ xenial main" \
     | tee /etc/apt/sources.list.d/richard-deng-ubuntu-cmake.list \
-    curl -fsSL https://richard-xx.github.io/ros-depthai-repo/PUBLIC.KEY | gpg --dearmor | tee /usr/local/share/keyrings/gcc_ppa.gpg > /dev/null \
+    && curl -fsSL https://richard-xx.github.io/gcc_ppa/PUBLIC.KEY | gpg --dearmor | tee /usr/local/share/keyrings/gcc_ppa.gpg > /dev/null \
     && echo "deb [signed-by=/usr/local/share/keyrings/gcc_ppa.gpg] https://richard-xx.github.io/gcc_ppa linux main" \
     | tee /etc/apt/sources.list.d/gcc_ppa.list \
     && apt update -qq \
