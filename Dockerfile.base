@@ -24,14 +24,10 @@ RUN ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     | gpg --dearmor | tee /usr/local/share/keyrings/richard-cmake.gpg > /dev/null \
     && echo "deb [signed-by=/usr/local/share/keyrings/richard-cmake.gpg] https://ppa.launchpadcontent.net/richard-deng/cmake/ubuntu/ xenial main" \
     | tee /etc/apt/sources.list.d/richard-deng-ubuntu-cmake.list \
-    && curl -fsSL https://richard-xx.github.io/gcc_ppa/PUBLIC.KEY \
-    | gpg --dearmor | tee /usr/local/share/keyrings/gcc_ppa.gpg > /dev/null \
-    && echo "deb [signed-by=/usr/local/share/keyrings/gcc_ppa.gpg] https://richard-xx.github.io/gcc_ppa linux main" \
-    | tee /etc/apt/sources.list.d/gcc_ppa.list \
     && apt update -qq \
     && apt install --no-install-recommends -qq -y sudo git make build-essential libssl-dev zlib1g-dev \
     libbz2-dev libreadline-dev libsqlite3-dev llvm libncursesw5-dev xz-utils tk-dev \
-    libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev unzip ccache cmake openssl g++-10 \
+    libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev unzip ccache cmake openssl g++ \
     && if [[ "$(dpkg --print-architecture)" = i386 ]]; then \
     apt --no-install-recommends -qq -y install gcc-multilib g++-multilib ; \
     fi \
@@ -41,11 +37,8 @@ RUN ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && adduser arm sudo \
     && echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers \
     && echo "[global]" >> /etc/pip.conf \
-    && echo "extra-index-url=https://mirrors.cernet.edu.cn/pypi/web/simple https://pypi.tuna.tsinghua.edu.cn//simple" >> /etc/pip.conf \
-    && echo "trusted-host = mirrors.cernet.edu.cn pypi.tuna.tsinghua.edu.cn pypi.org" >> /etc/pip.conf \
-    && update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 540 --slave /usr/bin/g++ g++ /usr/bin/g++-5 \
-    && update-alternatives --install /usr/bin/gcc gcc /usr/local/gcc-10/bin/gcc-10 1050 --slave /usr/bin/g++ g++ /usr/local/gcc-10/bin/g++-10 
-#    && update-alternatives --set gcc /usr/bin/gcc-5
+    && echo "extra-index-url=https://mirrors.cernet.edu.cn/pypi/web/simple https://pypi.tuna.tsinghua.edu.cn/simple" >> /etc/pip.conf \
+    && echo "trusted-host = mirrors.cernet.edu.cn pypi.tuna.tsinghua.edu.cn pypi.org" >> /etc/pip.conf
 
 RUN git clone https://github.com/pyenv/pyenv.git --depth 1 \
     && cd pyenv/plugins/python-build \
