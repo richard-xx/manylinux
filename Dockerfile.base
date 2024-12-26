@@ -31,7 +31,7 @@ RUN ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && apt update -qq \
     && apt install --no-install-recommends -qq -y sudo git make build-essential libssl-dev zlib1g-dev \
     libbz2-dev libreadline-dev libsqlite3-dev llvm libncursesw5-dev xz-utils tk-dev \
-    libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev unzip ccache cmake openssl gcc-10 \
+    libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev unzip ccache cmake openssl g++-10 \
     && if [[ "$(dpkg --print-architecture)" = i386 ]]; then \
     apt --no-install-recommends -qq -y install gcc-multilib g++-multilib ; \
     fi \
