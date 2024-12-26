@@ -77,7 +77,7 @@ jobs:
 
       # 构建并上传
       - name: Build and push
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         if: github.event.inputs.image == 'manylinux'
         with:
           context: .
@@ -108,7 +108,7 @@ jobs:
       
       # 构建并上传
       - name: Build and push
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         if: github.event.inputs.image == 'rpi' 
         with:
           context: .
