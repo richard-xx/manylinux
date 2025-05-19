@@ -14,6 +14,7 @@ on:
         options:
         - manylinux
         - rpi
+        - rpi_base
       
 
 env:
@@ -126,3 +127,34 @@ jobs:
         run: |
           docker buildx imagetools inspect \
           ${{ env.REGISTRY }}/richard-xx/raspbian:${{ steps.meta_rpi.outputs.version }}
+
+
+      - name: Extract metadata for Docker
+        if: github.event.inputs.image == 'rpi_base' 
+        id: meta_rpi_base
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/richard-xx/raspbian
+          tags: |
+            type=raw,value=stretch_base
+            type=raw,value=9_base
+      # 构建并上传
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        if: github.event.inputs.image == 'rpi_base' 
+        with:
+          context: .
+          file: ./Dockerfile.rpi
+          builder: ${{ steps.buildx.outputs.name }}
+          platforms: linux/arm/v7
+          push: true
+          tags: ${{ steps.meta_rpi_base.outputs.tags }}
+          labels: ${{ steps.meta_rpi_base.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Inspect image
+        if: github.event.inputs.image == 'rpi_base'
+        run: |
+          docker buildx imagetools inspect \
+          ${{ env.REGISTRY }}/richard-xx/raspbian:${{ steps.meta_rpi_base.outputs.version }}
