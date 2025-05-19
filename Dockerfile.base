@@ -38,5 +38,5 @@ RUN env PYTHON_MAKE_OPTS="-j$(nproc)" CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="$
     PYTHON_CONFIGURE_OPTS="--enable-shared --with-openssl-rpath=auto --with-ensurepip=no" python-build 3.8.20 /opt/_internal/cpython-3.8.20 \
     && curl -fsSL https://bootstrap.pypa.io/3.8/get-pip.py | /opt/_internal/cpython-3.8.20/bin/python -
 
-USER arm
+USER pi
 WORKDIR /io
