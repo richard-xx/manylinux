@@ -14,12 +14,11 @@ ENV AUDITWHEEL_POLICY=manylinux_2_24
 RUN export AUDITWHEEL_ARCH=$(uname -m) && \
     echo "AUDITWHEEL_ARCH is set to $AUDITWHEEL_ARCH" \
     echo "AUDITWHEEL_PLAT=${AUDITWHEEL_POLICY}_${AUDITWHEEL_ARCH}" >>  /etc/environment
-
-RUN git clone https://github.com/pyenv/pyenv.git --depth 1 \
-    && cd pyenv/plugins/python-build \
-    && sudo bash ./install.sh
-    
-RUN env PYTHON_MAKE_OPTS="-j$(nproc)" CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
+   
+RUN RUN cd /pyenv/plugins/python-build \
+    && git pull \
+    && sudo bash ./install.sh \
+    && env PYTHON_MAKE_OPTS="-j$(nproc)" CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
     PYTHON_CONFIGURE_OPTS="--enable-shared --with-openssl-rpath=auto --with-ensurepip=no" python-build 2.7.18 /opt/_internal/cpython-2.7.18 \
     && curl -fsSL https://bootstrap.pypa.io/pip/2.7/get-pip.py | /opt/_internal/cpython-2.7.18/bin/python -
 
