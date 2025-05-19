@@ -2,7 +2,7 @@ FROM ghcr.io/richard-xx/raspbian:9
 ENV TZ='Asia/Shanghai'
 ENV SHELL=/bin/bash
 SHELL ["/bin/bash","-c"]
-
+USER root
 ENV DEBIAN_FRONTEND=noninteractive
 ENV MANYLINUX_CPPFLAGS="-march=armv6 -Wdate-time -D_FORTIFY_SOURCE=2"
 ENV MANYLINUX_CFLAGS="-march=armv6 -g -O2 -Wall -fdebug-prefix-map=/=. -fstack-protector-strong -Wformat -Werror=format-security"
@@ -37,6 +37,3 @@ RUN env PYTHON_MAKE_OPTS="-j$(nproc)" CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="$
 RUN env PYTHON_MAKE_OPTS="-j$(nproc)" CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
     PYTHON_CONFIGURE_OPTS="--enable-shared --with-openssl-rpath=auto --with-ensurepip=no" python-build 3.8.20 /opt/_internal/cpython-3.8.20 \
     && curl -fsSL https://bootstrap.pypa.io/3.8/get-pip.py | /opt/_internal/cpython-3.8.20/bin/python -
-
-USER pi
-WORKDIR /io

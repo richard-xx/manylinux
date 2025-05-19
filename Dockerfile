@@ -2,7 +2,7 @@ FROM ghcr.io/richard-xx/raspbian:9_base
 ENV TZ='Asia/Shanghai'
 ENV SHELL=/bin/bash
 SHELL ["/bin/bash","-c"]
-
+USER root
 ENV DEBIAN_FRONTEND=noninteractive
 ENV MANYLINUX_CPPFLAGS="-march=armv6 -Wdate-time -D_FORTIFY_SOURCE=2"
 ENV MANYLINUX_CFLAGS="-march=armv6 -g -O2 -Wall -fdebug-prefix-map=/=. -fstack-protector-strong -Wformat -Werror=format-security"
