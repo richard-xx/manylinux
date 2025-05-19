@@ -15,7 +15,7 @@ RUN export AUDITWHEEL_ARCH=$(uname -m) && \
     echo "AUDITWHEEL_ARCH is set to $AUDITWHEEL_ARCH" \
     echo "AUDITWHEEL_PLAT=${AUDITWHEEL_POLICY}_${AUDITWHEEL_ARCH}" >>  /etc/environment
    
-RUN RUN cd /pyenv/plugins/python-build \
+RUN cd /pyenv/plugins/python-build \
     && git pull \
     && sudo bash ./install.sh \
     && env PYTHON_MAKE_OPTS="-j$(nproc)" CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
