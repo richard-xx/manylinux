@@ -144,7 +144,7 @@ jobs:
         if: github.event.inputs.image == 'rpi_base' 
         with:
           context: .
-          file: ./Dockerfile.rpi
+          file: ./Dockerfile.base
           builder: ${{ steps.buildx.outputs.name }}
           platforms: linux/arm/v7
           push: true
