@@ -23,13 +23,13 @@ ADD https://astral.sh/uv/install.sh /uv-installer.sh
 
 RUN sh /uv-installer.sh && rm /uv-installer.sh
 
-RUN uv python install 3.9.23 
+RUN uv python install 3.9.24 
 
-RUN uv python install 3.10.18
+RUN uv python install 3.10.19
 
-RUN uv python install 3.11.13
+RUN uv python install 3.11.14
 
-RUN uv python install 3.12.11
+RUN uv python install 3.12.12
 
 RUN uv python install 3.13.8
     
