@@ -23,7 +23,7 @@ ADD https://astral.sh/uv/install.sh /uv-installer.sh
 
 RUN sh /uv-installer.sh && rm /uv-installer.sh
 
-RUN uv python install 3.9.24 
+RUN uv python install 3.9.25
 
 RUN uv python install 3.10.19
 
@@ -31,13 +31,13 @@ RUN uv python install 3.11.14
 
 RUN uv python install 3.12.12
 
-RUN uv python install 3.13.8
+RUN uv python install 3.13.10
     
-RUN uv python install 3.13.8t
+RUN uv python install 3.13.10t
 
-RUN uv python install 3.14.0
+RUN uv python install 3.14.1
     
-RUN uv python install 3.14.0t
+RUN uv python install 3.14.1t
 
 COPY finalize.sh python-tag-abi-tag.py /tmp/
 RUN /tmp/finalize.sh
