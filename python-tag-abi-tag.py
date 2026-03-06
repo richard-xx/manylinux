@@ -3,8 +3,10 @@
 # See PEP 425 for exactly what these are, but an example would be:
 #   cp27-cp27mu
 
+from __future__ import print_function
+
 from packaging.tags import sys_tags
 
 # first tag is always the more specific tag
 tag = next(sys_tags())
-print(f"{tag.interpreter}-{tag.abi}")
+print("{0}-{1}".format(tag.interpreter, tag.abi))
