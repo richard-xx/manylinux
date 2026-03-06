@@ -22,4 +22,4 @@ do
 done
 
 uv tool install auditwheel
-uv tool install patchelf
+uv tool install patchelf --force
