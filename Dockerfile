@@ -25,19 +25,19 @@ RUN sh /uv-installer.sh && rm /uv-installer.sh
 
 RUN uv python install 3.9.25
 
-RUN uv python install 3.10.19
+RUN uv python install 3.10.20
 
-RUN uv python install 3.11.14
+RUN uv python install 3.11.15
 
-RUN uv python install 3.12.12
+RUN uv python install 3.12.13
 
-RUN uv python install 3.13.11
+RUN uv python install 3.13.12
     
-RUN uv python install 3.13.11t
+RUN uv python install 3.13.12t
 
-RUN uv python install 3.14.2
+RUN uv python install 3.14.3
     
-RUN uv python install 3.14.2t
+RUN uv python install 3.14.3t
 
 COPY finalize.sh python-tag-abi-tag.py /tmp/
 RUN /tmp/finalize.sh
