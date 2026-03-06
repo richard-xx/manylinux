@@ -9,71 +9,36 @@ ENV MANYLINUX_CFLAGS="-march=armv6 -g -O2 -Wall -fdebug-prefix-map=/=. -fstack-p
 ENV MANYLINUX_CXXFLAGS="-march=armv6 -g -O2 -Wall -fdebug-prefix-map=/=. -fstack-protector-strong -Wformat -Werror=format-security"
 ENV MANYLINUX_LDFLAGS="-Wl,-Bsymbolic-functions -Wl,-z,relro -Wl,-z,now -L/usr/local/ssl/lib -Wl,-rpath,/usr/local/ssl/lib"
 
-RUN cd /pyenv/plugins/python-build \
-    && git pull \
-    && sudo bash ./install.sh \
-    && env PYTHON_MAKE_OPTS="-j$(nproc)" CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
-    PYTHON_CONFIGURE_OPTS="--enable-shared --with-openssl-rpath=auto --with-ensurepip=no" python-build 3.9.25 /opt/_internal/cpython-3.9.25 \
-    && curl -fsSL https://bootstrap.pypa.io/get-pip.py | /opt/_internal/cpython-3.9.25/bin/python -
+ENV UV_PYTHON_INSTALL_DIR="/opt/_internal" \
+    UV_NO_CACHE=1 \
+    UV_VENV_SEED=1 \
+    UV_PYTHON_INSTALL_BIN=0 \
+    UV_INSTALL_DIR="/usr/local/bin" \
+    UV_TOOL_DIR="/opt/_internal/uv-tools" \
+    UV_TOOL_BIN_DIR="/usr/local/bin"
 
-RUN cd /pyenv/plugins/python-build \
-    && git pull \
-    && sudo bash ./install.sh \
-    && env PYTHON_MAKE_OPTS="-j$(nproc)" CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
-    PYTHON_CONFIGURE_OPTS="--enable-shared --with-openssl-rpath=auto --with-ensurepip=no" python-build 3.10.19 /opt/_internal/cpython-3.10.19 \
-    && curl -fsSL https://bootstrap.pypa.io/get-pip.py | /opt/_internal/cpython-3.10.19/bin/python -
+ADD https://astral.sh/uv/install.sh /uv-installer.sh
 
-RUN cd /pyenv/plugins/python-build \
-    && git pull \
-    && sudo bash ./install.sh \
-    && env PYTHON_MAKE_OPTS="-j$(nproc)" CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
-    PYTHON_CONFIGURE_OPTS="--enable-shared --with-openssl-rpath=auto --with-ensurepip=no" python-build 3.11.14 /opt/_internal/cpython-3.11.14 \
-    && curl -fsSL https://bootstrap.pypa.io/get-pip.py | /opt/_internal/cpython-3.11.14/bin/python -
+RUN sh /uv-installer.sh && rm /uv-installer.sh
 
-RUN cd /pyenv/plugins/python-build \
-    && git pull \
-    && sudo bash ./install.sh \
-    && env PYTHON_MAKE_OPTS="-j$(nproc)" CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
-    PYTHON_CONFIGURE_OPTS="--enable-shared --with-openssl-rpath=auto --with-ensurepip=no" python-build 3.12.12 /opt/_internal/cpython-3.12.12 \
-    && curl -fsSL https://bootstrap.pypa.io/get-pip.py | /opt/_internal/cpython-3.12.12/bin/python -
+RUN uv python install 3.9.25
 
-RUN cd /pyenv/plugins/python-build \
-    && git pull \
-    && sudo bash ./install.sh \
-    && env PYTHON_MAKE_OPTS="-j$(nproc)" CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
-    PYTHON_CONFIGURE_OPTS="--enable-shared --with-openssl-rpath=auto --with-ensurepip=no" python-build 3.13.11 /opt/_internal/cpython-3.13.11 \
-    && curl -fsSL https://bootstrap.pypa.io/get-pip.py | /opt/_internal/cpython-3.13.11/bin/python -
+RUN uv python install 3.10.20
+
+RUN uv python install 3.11.15
+
+RUN uv python install 3.12.13
+
+RUN uv python install 3.13.12
     
-RUN cd /pyenv/plugins/python-build \
-    && git pull \
-    && sudo bash ./install.sh \
-    && env PYTHON_MAKE_OPTS="-j$(nproc)" CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
-    PYTHON_CONFIGURE_OPTS="--enable-shared --with-openssl-rpath=auto --with-ensurepip=no" python-build 3.13.11t /opt/_internal/cpython-3.13.11t \
-    && curl -fsSL https://bootstrap.pypa.io/get-pip.py | /opt/_internal/cpython-3.13.11t/bin/python -
+RUN uv python install 3.13.12t
 
-RUN cd /pyenv/plugins/python-build \
-    && git pull \
-    && sudo bash ./install.sh \
-    && env PYTHON_MAKE_OPTS="-j$(nproc)" CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
-    PYTHON_CONFIGURE_OPTS="--enable-shared --with-openssl-rpath=auto --with-ensurepip=no" python-build 3.14.2 /opt/_internal/cpython-3.14.2 \
-    && curl -fsSL https://bootstrap.pypa.io/get-pip.py | /opt/_internal/cpython-3.14.2/bin/python -
+RUN uv python install 3.14.3
     
-RUN cd /pyenv/plugins/python-build \
-    && git pull \
-    && sudo bash ./install.sh \
-    && env PYTHON_MAKE_OPTS="-j$(nproc)" CPPFLAGS="${MANYLINUX_CPPFLAGS}" CFLAGS="${MANYLINUX_CFLAGS} -fPIC" CXXFLAGS="${MANYLINUX_CXXFLAGS} -fPIC" LDFLAGS="${MANYLINUX_LDFLAGS} -fPIC" \
-    PYTHON_CONFIGURE_OPTS="--enable-shared --with-openssl-rpath=auto --with-ensurepip=no" python-build 3.14.2t /opt/_internal/cpython-3.14.2t \
-    && curl -fsSL https://bootstrap.pypa.io/get-pip.py | /opt/_internal/cpython-3.14.2t/bin/python -
+RUN uv python install 3.14.3t
 
 COPY finalize.sh python-tag-abi-tag.py /tmp/
 RUN /tmp/finalize.sh
-
-RUN if [[ "$(dpkg --print-architecture)" = i386 ]]; then \
-    url=$(curl https://api.github.com/repos/NixOS/patchelf/releases/88491801 | egrep "https://github.com/NixOS/patchelf/releases/download/.*?i686" | cut -d : f 2,3 | tr -d '"' ); \
-    else \
-    url=$(curl https://api.github.com/repos/NixOS/patchelf/releases/88491801 | egrep "https://github.com/NixOS/patchelf/releases/download/.*?$(uname -m)" | cut -d : -f 2,3 | tr -d '"' ); \
-    fi \
-    && curl -sSLo - ${url} | tar -zxv --strip-components=1 -C /usr/local
 
 USER pi
 WORKDIR /io
