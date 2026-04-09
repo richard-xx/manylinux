@@ -31,13 +31,13 @@ RUN uv python install 3.11.15
 
 RUN uv python install 3.12.13
 
-RUN uv python install 3.13.12
+RUN uv python install 3.13.13
     
-RUN uv python install 3.13.12t
+RUN uv python install 3.13.13t
 
-RUN uv python install 3.14.3
+RUN uv python install 3.14.4
     
-RUN uv python install 3.14.3t
+RUN uv python install 3.14.4t
 
 COPY finalize.sh python-tag-abi-tag.py /tmp/
 RUN /tmp/finalize.sh
