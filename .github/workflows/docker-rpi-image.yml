@@ -33,15 +33,15 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       # 配置 QEMU 和 buildx 用于多架构镜像的构建
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
+        uses: docker/setup-qemu-action@v4
 
       - name: Set up Docker Buildx
         id: buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
         with:
           version: latest
           buildkitd-config-inline: |
@@ -59,7 +59,7 @@ jobs:
       # 登录到 GitHub Packages 容器仓库
       # 注意 secrets.GITHUB_TOKEN 不需要手动添加，直接就可以用
       - name: Log in to the Container registry
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
@@ -69,7 +69,7 @@ jobs:
       - name: Extract metadata for Docker
         if: github.event.inputs.image == 'manylinux'
         id: meta
-        uses: docker/metadata-action@v5
+        uses: docker/metadata-action@v6
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE }} 
           tags: |
@@ -78,7 +78,7 @@ jobs:
 
       # 构建并上传
       - name: Build and push
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         if: github.event.inputs.image == 'manylinux'
         with:
           context: .
@@ -100,7 +100,7 @@ jobs:
       - name: Extract metadata for Docker
         if: github.event.inputs.image == 'rpi' 
         id: meta_rpi
-        uses: docker/metadata-action@v5
+        uses: docker/metadata-action@v6
         with:
           images: ${{ env.REGISTRY }}/richard-xx/raspbian
           tags: |
@@ -109,7 +109,7 @@ jobs:
       
       # 构建并上传
       - name: Build and push
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         if: github.event.inputs.image == 'rpi' 
         with:
           context: .
@@ -132,15 +132,16 @@ jobs:
       - name: Extract metadata for Docker
         if: github.event.inputs.image == 'rpi_base' 
         id: meta_rpi_base
-        uses: docker/metadata-action@v5
+        uses: docker/metadata-action@v6
         with:
           images: ${{ env.REGISTRY }}/richard-xx/raspbian
           tags: |
             type=raw,value=stretch_base
             type=raw,value=9_base
+
       # 构建并上传
       - name: Build and push
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         if: github.event.inputs.image == 'rpi_base' 
         with:
           context: .
