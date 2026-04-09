@@ -11,7 +11,7 @@ mkdir /opt/python
 find /opt/_internal/ -mindepth 1 -maxdepth 1 \( -name 'cpython*' -o -name 'pypy*' \) -print | sort -V | while IFS= read -r PREFIX
 do
   if [[ "$PREFIX" =~ (2\.7|3\.[5-8]\.) ]]; then
-    "${PREFIX}"/bin/python -m pip install -U pip build certifi wheel setuptools
+    "${PREFIX}"/bin/python -m pip install -U pip build certifi wheel setuptools -i https://mirrors.cernet.edu.cn/pypi/web/simple
   else
     uv pip install --python "${PREFIX}"/bin/python -U pip build certifi wheel setuptools
   fi
